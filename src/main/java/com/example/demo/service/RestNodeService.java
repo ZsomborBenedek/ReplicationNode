@@ -129,7 +129,7 @@ public class RestNodeService {
     public void addToNameServer(String ip) throws IOException {
         System.out.println("Ik run nu addToNameServer, Variebelen ip vn nameserver "+ip);
         nameServerIP = ip;
-        URL connection2 = new URL("http://"+ip+":10000/AddNode?Name="+name+"&ip="+thisIp);
+        URL connection2 = new URL("http://"+ip+":10000/AddNode?Name="+name+"&Ip="+thisIp);
         BufferedReader in = new BufferedReader(new InputStreamReader(
                 connection2.openStream()));
         String message = in.readLine();
