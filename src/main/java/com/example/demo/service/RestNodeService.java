@@ -15,7 +15,7 @@ public class RestNodeService {
     String previousIP = "";
     String nextIP = "";
     String nameServerIP;
-    boolean setupb;
+    boolean setupb = false;
     ArrayList<String> files = new ArrayList<>();
     boolean first = false;
     boolean running = true;
@@ -36,8 +36,9 @@ public class RestNodeService {
         chekFiles();
         //For lus da alle files een voor een naar de naming server stuurt
         System.out.println("Opgestart");
-        setupb = false;
-    }
+        //False gezet in declatatie nu ipv constructor, niet zeker
+        //setupb = false;
+}
 
 
     //Send UDP Messages
@@ -126,6 +127,7 @@ public class RestNodeService {
 
     //ShutDown
     public void addToNameServer(String ip) throws IOException {
+        System.out.println("Ik run nu addToNameServer, Variebelen ip vn nameserver "+ip);
         nameServerIP = ip;
         URL connection2 = new URL("http://"+ip+":10000/AddNode?Name="+name+"&ip="+thisIp);
         BufferedReader in = new BufferedReader(new InputStreamReader(

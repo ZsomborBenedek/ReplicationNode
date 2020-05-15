@@ -67,6 +67,8 @@ public class MulticastListner implements Runnable {
                     //
                     nodeService.next = temp.get(0);
                     nodeService.nextIP = temp.get(1);
+                    System.out.println("Mijne next is nu "+nodeService.next+" "+nodeService.nextIP);
+                    System.out.println("Mijne previous is nu "+nodeService.previous+" "+nodeService.previousIP);
                 }
                 if (nodeService.hashfunction(nodeService.previous, true) < nodeService.hashfunction(temp.get(0), true) && nodeService.hashfunction(temp.get(0), true) < nodeService.hashfunction(nodeService.name, true)) {
                     URL connection2 = new URL("http://"+temp.get(1)+":10000/SetNext?Name="+nodeService.name+"&ip="+nodeService.thisIp);
@@ -77,6 +79,8 @@ public class MulticastListner implements Runnable {
                     //
                     nodeService.previous = temp.get(0);
                     nodeService.previousIP = temp.get(1);
+                    System.out.println("Mijne next is nu "+nodeService.next+" "+nodeService.nextIP);
+                    System.out.println("Mijne previous is nu "+nodeService.previous+" "+nodeService.previousIP);
                 }
             }
         }
@@ -95,7 +99,7 @@ public class MulticastListner implements Runnable {
             socket.receive(packet);
             String msg = new String(packet.getData(),
                     packet.getOffset(), packet.getLength());
-            System.out.println(msg);
+            System.out.println("Ik krijg multicast "+msg);
             if (msg.contains("nodeCount"))
                 nodeService.setUp(msg);
             if (msg.contains("newNode"))

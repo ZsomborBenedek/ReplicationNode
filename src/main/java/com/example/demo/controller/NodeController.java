@@ -23,6 +23,7 @@ public class NodeController {
     @GetMapping("/SetNameServer")
     public String setNameServer (@RequestParam(value = "ip", defaultValue = "omo") String ip) throws IOException {
         if (!ip.equals("omo")) {
+            System.out.println("Ik run nu /SetNameServer, Variebelen ip "+ip);
             nodeService.addToNameServer(ip);
             return "node  with ip address "+ip+" was succesfully added to the node map";
         }
@@ -32,6 +33,7 @@ public class NodeController {
     @GetMapping("/SetNext")
     public String setNext (@RequestParam(value = "name", defaultValue = "omo") String name,@RequestParam(value = "ip", defaultValue = "omo") String ip) throws IOException {
         if (!name.equals("omo") && !ip.equals("omo")) {
+            System.out.println("Ik run nu /SetNext, Variebelen name "+name+" ip "+ip);
             nodeService.next(name, ip);
             return "node "+name+" with ip address "+ip+" was succesfully added to the node map";
         }
@@ -41,6 +43,7 @@ public class NodeController {
     @GetMapping("/SetPrevious")
     public String setPrevious (@RequestParam(value = "name", defaultValue = "omo") String name,@RequestParam(value = "ip", defaultValue = "omo") String ip) throws IOException {
         if (!name.equals("omo") && !ip.equals("omo")) {
+            System.out.println("Ik run nu /SetPrevious, Variebelen name "+name+" ip "+ip);
             nodeService.previous(name, ip);
             return "node "+name+" with ip address "+ip+" was succesfully added to the node map";
         }
@@ -50,7 +53,7 @@ public class NodeController {
     @GetMapping("/GetReplicationFile")
     public String getReplicationFile (@RequestParam(value = "name", defaultValue = "omo") String name,@RequestParam(value = "ownerIP", defaultValue = "omo") String ip) throws IOException {
         if (!name.equals("omo") && !ip.equals("omo")) {
-
+            System.out.println("Ik run nu /GetReplicatedFile, Variebelen name "+name+" ownerIP "+ip);
             nodeService.recieveTCP(ip,name);
             return "node "+name+" with ip address "+ip+" was succesfully added to the node map";
         }
@@ -60,6 +63,7 @@ public class NodeController {
     @GetMapping("/HostLocalFile")
     public String hostLocalFile (@RequestParam(value = "FileName", defaultValue = "omo") String name) throws IOException {
         if (!name.equals("omo")) {
+            System.out.println("Ik run nu /HostLocalFile, Variebelen name "+name);
             //Ga thread moete worre
             TCPListner temp = new TCPListner();
             temp.sendTCP(name);
@@ -70,6 +74,7 @@ public class NodeController {
     }
     @GetMapping("/Kill")
     public String kill () throws IOException {
+        System.out.println("Ik run nu /kill");
             nodeService.shutdown();
             return "node "+nodeService.name+" with ip address "+nodeService.thisIp+" was succesfully added to the node map";
         };
