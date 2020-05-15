@@ -117,11 +117,11 @@ public class MulticastListner implements Runnable {
 
     @Override
     public void run() {
-            try {
-                receiveUDPMessage("230.0.0.0", 10000);
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
+        try {
+            receiveUDPMessage("230.0.0.0", 10000);
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
+}
 

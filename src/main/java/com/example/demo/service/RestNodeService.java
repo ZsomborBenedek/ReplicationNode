@@ -33,12 +33,12 @@ public class RestNodeService {
         String message = in.readLine();
         System.out.println(message);
         */
-        chekFiles();
+        //chekFiles();
         //For lus da alle files een voor een naar de naming server stuurt
         System.out.println("Opgestart");
         //False gezet in declatatie nu ipv constructor, niet zeker
         //setupb = false;
-}
+    }
 
 
     //Send UDP Messages
@@ -52,7 +52,7 @@ public class RestNodeService {
         socket.send(packet);
         socket.close();
     }
-        //hahahaha
+    //hahahaha
 
     //Parse message to set up new next node
     public void next(String name, String ip){

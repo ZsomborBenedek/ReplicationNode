@@ -75,8 +75,8 @@ public class NodeController {
     @GetMapping("/Kill")
     public String kill () throws IOException {
         System.out.println("Ik run nu /kill");
-            nodeService.shutdown();
-            return "node "+nodeService.name+" with ip address "+nodeService.thisIp+" was succesfully added to the node map";
-        };
+        nodeService.shutdown();
+        return "node "+nodeService.name+" with ip address "+nodeService.thisIp+" was succesfully added to the node map";
+    };
 
 }
