@@ -52,7 +52,7 @@ public class RestNodeService {
         socket.send(packet);
         socket.close();
     }
-
+        //hahahaha
 
     //Parse message to set up new next node
     public void next(String name, String ip){
