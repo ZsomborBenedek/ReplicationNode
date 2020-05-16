@@ -27,12 +27,6 @@ public class RestNodeService {
         System.out.println("dees is mijn ip "+thisIp);
         //Recieve reply van Namingserver
         /*
-        DOE Deze shit me Reply van naming server
-        URL connection = new URL("http://localhost:8080/LocateFile?fileName=jej.txt");
-        BufferedReader in = new BufferedReader(new InputStreamReader(
-                connection.openStream()));
-        String message = in.readLine();
-        System.out.println(message);
         */
         chekFiles();
         //For lus da alle files een voor een naar de naming server stuurt
