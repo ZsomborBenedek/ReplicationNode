@@ -35,18 +35,12 @@ public class MulticastListner implements Runnable {
                 //sendUDPMessage("previous " + name + "::ip " + thisIp, temp.get(1), 10000);
                 URL connection = new URL("http://"+temp.get(1)+":10000/SetPrevious?Name="+nodeService.name+"&ip="+nodeService.thisIp);
                 //Mogenlijk Zo reply opvangen?
-                BufferedReader in = new BufferedReader(new InputStreamReader(
-                        connection.openStream()));
-                String message = in.readLine();
-                System.out.println(message);
+                connection.openConnection().getInputStream();
                 //
                 //sendUDPMessage("next " + name + "::ip " + thisIp, temp.get(1), 10000);
                 URL connection2 = new URL("http://"+temp.get(1)+":10000/SetNext?Name="+nodeService.name+"&ip="+nodeService.thisIp);
                 //
-                BufferedReader in2 = new BufferedReader(new InputStreamReader(
-                        connection2.openStream()));
-                String message2 = in2.readLine();
-                System.out.println(message2);
+                connection2.openConnection().getInputStream();
                 //
 
                 nodeService.next = temp.get(0);
@@ -60,10 +54,7 @@ public class MulticastListner implements Runnable {
                 if (nodeService.hashfunction(nodeService.name, true) < nodeService.hashfunction(temp.get(0), true) && nodeService.hashfunction(temp.get(0), true) < nodeService.hashfunction(nodeService.next, true)) {
                     URL connection = new URL("http://"+temp.get(1)+":10000/SetPrevious?Name="+nodeService.name+"&ip="+nodeService.thisIp);
                     //
-                    BufferedReader in = new BufferedReader(new InputStreamReader(
-                            connection.openStream()));
-                    String message = in.readLine();
-                    System.out.println(message);
+                    connection.openConnection().getInputStream();
                     //
                     nodeService.next = temp.get(0);
                     nodeService.nextIP = temp.get(1);
@@ -72,10 +63,7 @@ public class MulticastListner implements Runnable {
                 }
                 if (nodeService.hashfunction(nodeService.previous, true) < nodeService.hashfunction(temp.get(0), true) && nodeService.hashfunction(temp.get(0), true) < nodeService.hashfunction(nodeService.name, true)) {
                     URL connection2 = new URL("http://"+temp.get(1)+":10000/SetNext?Name="+nodeService.name+"&ip="+nodeService.thisIp);
-                    BufferedReader in = new BufferedReader(new InputStreamReader(
-                            connection2.openStream()));
-                    String message = in.readLine();
-                    System.out.println(message);
+                    connection2.openConnection().getInputStream();
                     //
                     nodeService.previous = temp.get(0);
                     nodeService.previousIP = temp.get(1);

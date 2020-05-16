@@ -28,7 +28,6 @@ public class RestNodeService {
         //Recieve reply van Namingserver
         /*
         */
-        chekFiles();
         //For lus da alle files een voor een naar de naming server stuurt
         System.out.println("Opgestart");
         //False gezet in declatatie nu ipv constructor, niet zeker
@@ -75,19 +74,19 @@ public class RestNodeService {
     //Check locally stored files
     private void chekFiles() throws IOException {
         System.out.println("ik run nu chek files");
-        File folder = new File("/home/pi/ReplicationNode/src/localFiles");
+        //
+        // File folder = new File("/home/pi/ReplicationNode/src/localFiles");
+        File folder = new File("C:\\Users\\Arla\\Desktop\\RestfullNode\\src\\localFiles");
         File[] listOfFiles = folder.listFiles();
 
         for (int i = 0; i < listOfFiles.length; i++) {
             if (listOfFiles[i].isFile()) {
                 String bestand = listOfFiles[i].getName().replace("Files\\","");
-                files.add(bestand);
-                System.out.println("Ik heb file "+bestand+" lokaal staan bruur.");
-                URL connection2 = new URL("http://"+nameServerIP+":10000/AddFile?Name="+name+"&File="+bestand);
-                BufferedReader in = new BufferedReader(new InputStreamReader(
-                        connection2.openStream()));
-                String message = in.readLine();
-                System.out.println(message);
+                String[] temp = bestand.split("\\.");
+                files.add(temp[0]);
+                System.out.println("Ik heb file "+temp[0]+" lokaal staan bruur.");
+                URL connection2 = new URL("http://"+nameServerIP+":10000/AddFile?Name="+name+"&File="+temp[0]);
+                connection2.openConnection().getInputStream();
             } else if (listOfFiles[i].isDirectory()) {
                 System.out.println("Directory " + listOfFiles[i].getName());
             }
@@ -100,8 +99,9 @@ public class RestNodeService {
         for (int i = 0; i < listOfFiles.length; i++) {
             if (listOfFiles[i].isFile()) {
                 String bestand = listOfFiles[i].getName().replace("Files\\","");
-                files.add(bestand);
-                System.out.println("Ik heb file "+bestand+" lokaal staan bruur.");
+                String[] temp = bestand.split(".");
+                files.add(temp[0]);
+                System.out.println("Ik heb file "+temp[0]+" lokaal staan bruur.");
 
             } else if (listOfFiles[i].isDirectory()) {
                 System.out.println("Directory " + listOfFiles[i].getName());
@@ -131,10 +131,8 @@ public class RestNodeService {
         System.out.println("Ik run nu addToNameServer, Variebelen ip vn nameserver "+ip);
         nameServerIP = ip;
         URL connection2 = new URL("http://"+ip+":10000/AddNode?Name="+name+"&Ip="+thisIp);
-        BufferedReader in = new BufferedReader(new InputStreamReader(
-                connection2.openStream()));
-        String message = in.readLine();
-        System.out.println(message);
+        connection2.openConnection().getInputStream();
+        chekFiles();
     }
     public void shutdown() throws IOException {
 
@@ -148,10 +146,7 @@ public class RestNodeService {
 
         URL connection = new URL("http://"+nextIP+":10000/SetPrevious?Name="+previous+"&ip="+previousIP);
         //
-        BufferedReader in2 = new BufferedReader(new InputStreamReader(
-                connection.openStream()));
-        String message2 = in2.readLine();
-        System.out.println(message2);
+        connection.openConnection().getInputStream();
         //
 
         for (String file : files){
