@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import javax.annotation.PostConstruct;
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
@@ -39,6 +40,7 @@ public class RestNodeService {
         //False gezet in declatatie nu ipv constructor, niet zeker
         //setupb = false;
     }
+    @PostConstruct
 
 
     //Send UDP Messages

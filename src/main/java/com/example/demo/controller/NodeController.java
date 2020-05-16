@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.PostConstruct;
 import java.io.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -14,6 +15,10 @@ import java.util.concurrent.Executors;
 public class NodeController {
     RestNodeService nodeService;
     public NodeController() throws IOException {
+    }
+
+    @PostConstruct
+    public void init() throws IOException {
         nodeService = new RestNodeService();
         ExecutorService threadPool = Executors.newFixedThreadPool(2);
         threadPool.execute(new MulticastListner(nodeService));
