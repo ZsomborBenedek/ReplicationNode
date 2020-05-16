@@ -34,7 +34,7 @@ public class RestNodeService {
         String message = in.readLine();
         System.out.println(message);
         */
-        //chekFiles();
+        chekFiles();
         //For lus da alle files een voor een naar de naming server stuurt
         System.out.println("Opgestart");
         //False gezet in declatatie nu ipv constructor, niet zeker
@@ -80,7 +80,7 @@ public class RestNodeService {
 
     //Check locally stored files
     private void chekFiles() throws IOException {
-        File folder = new File("Files");
+        File folder = new File("/home/pi/ReplicationNode/src/localFiles");
         File[] listOfFiles = folder.listFiles();
 
         for (int i = 0; i < listOfFiles.length; i++) {
@@ -99,7 +99,7 @@ public class RestNodeService {
         }
     }
     private void chekReplicatedFiles(){
-        File folder = new File("Files");
+        File folder = new File("/home/pi/ReplicationNode/src/replicatedFiles");
         File[] listOfFiles = folder.listFiles();
 
         for (int i = 0; i < listOfFiles.length; i++) {
@@ -118,11 +118,15 @@ public class RestNodeService {
 
     }
 
+
+    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    //Hier mogenlijk bool om folder te bepalen
+    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     public void recieveTCP(String ip, String filename) throws IOException {
         byte [] b = new byte[5000];
         Socket sr = new Socket(ip,6667);
         InputStream is = sr.getInputStream();
-        FileOutputStream fr = new FileOutputStream("C:\\Users\\Arla\\Desktop\\School\\EenBekeTeste\\AlstHierKomtIstCool\\"+filename);
+        FileOutputStream fr = new FileOutputStream("/home/pi/ReplicationNode/src/replicatedFiles"+filename);
         is.read(b,0,b.length);
         fr.write(b,0,b.length);
     }
