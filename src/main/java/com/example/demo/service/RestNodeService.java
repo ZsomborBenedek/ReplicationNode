@@ -74,6 +74,7 @@ public class RestNodeService {
 
     //Check locally stored files
     private void chekFiles() throws IOException {
+        System.out.println("ik run nu chek files");
         File folder = new File("/home/pi/ReplicationNode/src/localFiles");
         File[] listOfFiles = folder.listFiles();
 
