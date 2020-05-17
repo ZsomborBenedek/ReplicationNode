@@ -128,6 +128,7 @@ public class RestNodeService {
     //Hier mogenlijk bool om folder te bepalen
     //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     public void recieveTCP(String ip, String filename) throws IOException, InterruptedException {
+        System.out.println("ik run nu receive tcp met variabelen ip "+ip+" filename "+filename);
         Thread.sleep(500);
         byte [] b = new byte[5000];
         Socket sr = new Socket(ip,69696);
