@@ -127,9 +127,10 @@ public class RestNodeService {
     //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     //Hier mogenlijk bool om folder te bepalen
     //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    public void recieveTCP(String ip, String filename) throws IOException {
+    public void recieveTCP(String ip, String filename) throws IOException, InterruptedException {
+        Thread.sleep(500);
         byte [] b = new byte[5000];
-        Socket sr = new Socket(ip,6667);
+        Socket sr = new Socket(ip,69696);
         InputStream is = sr.getInputStream();
         FileOutputStream fr = new FileOutputStream("/home/pi/ReplicationNode/src/replicatedFiles"+filename);
         is.read(b,0,b.length);

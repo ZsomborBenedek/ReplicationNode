@@ -57,7 +57,7 @@ public class NodeController {
             return"adding new node failed";
     }
     @GetMapping("/GetReplicationFile")
-    public String getReplicationFile (@RequestParam(value = "name", defaultValue = "omo") String name,@RequestParam(value = "ownerIP", defaultValue = "omo") String ip) throws IOException {
+    public String getReplicationFile (@RequestParam(value = "name", defaultValue = "omo") String name,@RequestParam(value = "ownerIP", defaultValue = "omo") String ip) throws IOException, InterruptedException {
         if (!name.equals("omo") && !ip.equals("omo")) {
             System.out.println("Ik run nu /GetReplicatedFile, Variebelen name "+name+" ownerIP "+ip);
             nodeService.recieveTCP(ip,name);

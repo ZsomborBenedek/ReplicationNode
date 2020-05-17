@@ -14,7 +14,7 @@ public class TCPListner implements Runnable{
         this.file = file;
     }
     public void sendTCP() throws IOException {
-        ServerSocket s = new ServerSocket(6667);
+        ServerSocket s = new ServerSocket(69696);
         Socket sr = s.accept();
         FileInputStream fr = null;
         if(nodeService.name.equals("host2"))
