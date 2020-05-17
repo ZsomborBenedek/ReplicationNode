@@ -75,7 +75,15 @@ public class RestNodeService {
     private void chekFiles() throws IOException {
         System.out.println("ik run nu chek files");
         //
-         File folder = new File("/home/pi/ReplicationNode/src/localFiles");
+        File folder = null;
+        if (name.equals("host2"))
+        folder = new File("/home/pi/ReplicationNode/src/localFilesHost1");
+        if (name.equals("host3"))
+            folder = new File("/home/pi/ReplicationNode/src/localFilesHost2");
+        if (name.equals("host4"))
+            folder = new File("/home/pi/ReplicationNode/src/localFilesHost3");
+        if (name.equals("host5"))
+            folder = new File("/home/pi/ReplicationNode/src/localFilesHost4");
         //File folder = new File("C:\\Users\\Arla\\Desktop\\RestfullNode\\src\\localFiles");
         File[] listOfFiles = folder.listFiles();
 
