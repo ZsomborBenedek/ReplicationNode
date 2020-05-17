@@ -30,6 +30,7 @@ public class TCPListner implements Runnable{
         fr.read(b,0,b.length);
         OutputStream os = sr.getOutputStream();
         os.write(b,0,b.length);
+        System.out.println("versture is kleir");
     }
     public void transferTCP() throws IOException {
         ServerSocket s = new ServerSocket(6667);
@@ -43,6 +44,7 @@ public class TCPListner implements Runnable{
         os.write(b,0,b.length);
         File temp = new File("/home/pi/ReplicationNode/src/replicatedFiles/"+file);
         temp.delete();
+        System.out.println("transfer is kleir");
     }
 
     @Override
