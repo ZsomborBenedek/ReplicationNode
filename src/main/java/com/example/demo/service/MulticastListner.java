@@ -8,7 +8,6 @@ import java.util.ArrayList;
 public class MulticastListner implements Runnable {
 
     RestNodeService nodeService;
-    boolean first = false;
 
 
     public MulticastListner(RestNodeService temp) throws UnknownHostException {
@@ -28,7 +27,7 @@ public class MulticastListner implements Runnable {
                     temp.add(t);
             }
         if (nodeService.setupb) {
-            if (first) {
+            if (nodeService.first) {
                 System.out.println("de tweede is erbij");
                 //Hier rest shit set previous
                 //sendUDPMessage("previous " + name + "::ip " + thisIp, temp.get(1), 10000);
@@ -48,7 +47,7 @@ public class MulticastListner implements Runnable {
                 nodeService.previousIP = temp.get(1);
                 System.out.println("Mijne next is nu " + nodeService.next + " " + nodeService.nextIP);
                 System.out.println("Mijne previous is nu " + nodeService.previous + " " + nodeService.previousIP);
-                first = false;
+                nodeService.first = false;
             } else {
                 if (nodeService.hashfunction(nodeService.name, true) < nodeService.hashfunction(temp.get(0), true) && nodeService.hashfunction(temp.get(0), true) < nodeService.hashfunction(nodeService.next, true)) {
                     URL connection = new URL("http://" + temp.get(1) + ":9000/SetPrevious?Name=" + nodeService.name + "&ip=" + nodeService.thisIp);
