@@ -52,7 +52,7 @@ public class MulticastListner implements Runnable {
             } else {
                 if (nodeService.hashfunction(nodeService.name, true) < nodeService.hashfunction(temp.get(0), true) && nodeService.hashfunction(temp.get(0), true) < nodeService.hashfunction(nodeService.next, true)) {
                     Thread.sleep(500);
-                    URL connection = new URL("http://" + temp.get(1) + ":9000/SetPrevious?Name=" + nodeService.name + "&ip=" + nodeService.thisIp);
+                    URL connection = new URL("http://" + temp.get(1) + ":9000/SetPrevious?name=" + nodeService.name + "&ip=" + nodeService.thisIp);
                     //
                     connection.openConnection().getInputStream();
                     //
@@ -63,7 +63,7 @@ public class MulticastListner implements Runnable {
                 }
                 if (nodeService.hashfunction(nodeService.previous, true) < nodeService.hashfunction(temp.get(0), true) && nodeService.hashfunction(temp.get(0), true) < nodeService.hashfunction(nodeService.name, true)) {
                     Thread.sleep(500);
-                    URL connection2 = new URL("http://" + temp.get(1) + ":9000/SetNext?Name=" + nodeService.name + "&ip=" + nodeService.thisIp);
+                    URL connection2 = new URL("http://" + temp.get(1) + ":9000/SetNext?name=" + nodeService.name + "&ip=" + nodeService.thisIp);
                     connection2.openConnection().getInputStream();
                     //
                     nodeService.previous = temp.get(0);
