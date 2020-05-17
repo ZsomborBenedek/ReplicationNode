@@ -50,6 +50,8 @@ public class MulticastListner implements Runnable {
                 System.out.println("Mijne previous is nu " + nodeService.previous + " " + nodeService.previousIP);
                 nodeService.first = false;
             } else {
+                System.out.println("Meer dan 2 int netwerk mateke");
+                System.out.println("hashfunctie van "+nodeService.name+": "+nodeService.hashfunction(nodeService.name,true)+", en hashfunctie van de nieuwe "+temp.get(0)+": "+nodeService.hashfunction(temp.get(0),true));
                 if (nodeService.hashfunction(nodeService.name, true) < nodeService.hashfunction(temp.get(0), true) && nodeService.hashfunction(temp.get(0), true) < nodeService.hashfunction(nodeService.next, true)) {
                     Thread.sleep(500);
                     URL connection = new URL("http://" + temp.get(1) + ":9000/SetPrevious?name=" + nodeService.name + "&ip=" + nodeService.thisIp);
