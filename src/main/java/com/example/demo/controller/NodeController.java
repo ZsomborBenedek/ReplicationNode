@@ -91,7 +91,7 @@ public class NodeController {
     @GetMapping("/IsLowest")
     public String isLowest (@RequestParam(value = "Lowest", defaultValue = "omo") String value) throws IOException {
         if (!value.equals("omo")) {
-            System.out.println("Ik run nu /IsHighest, Variebelen value "+value);
+            System.out.println("Ik run nu /IsLowest, Variebelen value "+value);
             //Ga thread moete worre
             nodeService.setLowest(Boolean.getBoolean(value));
             return "node "+value+" with ip address was succesfully added to the node map";

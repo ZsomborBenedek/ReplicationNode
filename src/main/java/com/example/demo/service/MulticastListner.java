@@ -45,7 +45,14 @@ public class MulticastListner implements Runnable {
                 if (nodeService.hashfunction(temp.get(0),true) > nodeService.hashfunction(nodeService.name,true)) {
                     nodeService.isHoogste = false;
                     //
-                    //STUUR NAAR NODE DA HIJ DE HOOGSTE IS
+                    Thread.sleep(500);
+                    URL connection3 = new URL("http://" + temp.get(1) + ":9000/SetPrevious?name=" + nodeService.name + "&ip=" + nodeService.thisIp);
+                    connection3.openConnection().getInputStream();
+                    URL connection4 = new URL("http://" + temp.get(1) + ":9000/SetNext?name=" + nodeService.next + "&ip=" + nodeService.nextIP);
+                    connection4.openConnection().getInputStream();
+                    URL connection5 = new URL("http://" + temp.get(1) + ":9000/IsHighest?Highest=true");
+                    connection5.openConnection().getInputStream();
+                    System.out.println(temp.get(0)+" is nu de hoogst gehashte node");
                     //
                     System.out.println(temp.get(0)+" is nu de hoogst gehashte node");
                 }
@@ -53,7 +60,14 @@ public class MulticastListner implements Runnable {
                     if (nodeService.hashfunction(temp.get(0),true) < nodeService.hashfunction(nodeService.name,true)) {
                         nodeService.isLaagste = false;
                         //
-                        //STUUR NAAR NODE DA HIJ DE Laagste IS
+                        Thread.sleep(500);
+                        URL connection3 = new URL("http://" + temp.get(1) + ":9000/SetNext?name=" + nodeService.name + "&ip=" + nodeService.thisIp);
+                        connection3.openConnection().getInputStream();
+                        URL connection4 = new URL("http://" + temp.get(1) + ":9000/SetPrevious?name=" + nodeService.previous + "&ip=" + nodeService.previousIP);
+                        connection4.openConnection().getInputStream();
+                        URL connection5 = new URL("http://" + temp.get(1) + ":9000/IsLowest?Lowest=true");
+                        connection5.openConnection().getInputStream();
+                        System.out.println(temp.get(0)+" is nu de Laagst gehashte node");
                         //
                         System.out.println(temp.get(0)+" is nu de Laagst gehashte node");
                     }
