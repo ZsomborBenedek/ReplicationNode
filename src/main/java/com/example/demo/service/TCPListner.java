@@ -4,12 +4,16 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class TCPListner {
+public class TCPListner implements Runnable{
     RestNodeService nodeService;
-    public TCPListner(RestNodeService nodeService){
+    boolean mode;
+    String file;
+    public TCPListner(RestNodeService nodeService, boolean mode, String file){
         this.nodeService = nodeService;
+        this.mode = mode;
+        this.file = file;
     }
-    public void sendTCP(String file) throws IOException {
+    public void sendTCP() throws IOException {
         ServerSocket s = new ServerSocket(6667);
         Socket sr = s.accept();
         FileInputStream fr = null;
@@ -27,7 +31,7 @@ public class TCPListner {
         OutputStream os = sr.getOutputStream();
         os.write(b,0,b.length);
     }
-    public void transferTCP(String file) throws IOException {
+    public void transferTCP() throws IOException {
         ServerSocket s = new ServerSocket(6667);
         Socket sr = s.accept();
         FileInputStream fr = null;
@@ -39,5 +43,24 @@ public class TCPListner {
         os.write(b,0,b.length);
         File temp = new File("src/replicatedFiles/"+file);
         temp.delete();
+    }
+
+    @Override
+    public void run() {
+        if(mode) {
+            try {
+                sendTCP();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        else {
+            try {
+                transferTCP();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 }

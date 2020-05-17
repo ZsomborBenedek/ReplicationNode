@@ -14,13 +14,14 @@ import java.util.concurrent.Executors;
 @RestController
 public class NodeController {
     RestNodeService nodeService;
+    ExecutorService threadPool = Executors.newFixedThreadPool(5);
     public NodeController() throws IOException {
     }
 
     @PostConstruct
     public void init() throws IOException {
         nodeService = new RestNodeService();
-        ExecutorService threadPool = Executors.newFixedThreadPool(2);
+
         threadPool.execute(new MulticastListner(nodeService));
     }
 
@@ -68,9 +69,8 @@ public class NodeController {
     @GetMapping("/TransferReplicatedFile")
     public String transferReplicatedFile (@RequestParam(value = "name", defaultValue = "omo") String name,@RequestParam(value = "ownerIP", defaultValue = "omo") String ip) throws IOException {
         if (!name.equals("omo") && !ip.equals("omo")) {
-            System.out.println("Ik run nu /TransferReplicatedFile, Variebelen name "+name+" ownerIP "+ip);
-            TCPListner temp = new TCPListner(nodeService);
-            temp.transferTCP(name);
+            System.out.println("Ik run nu /GetReplicatedFile, Variebelen name "+name+" ownerIP "+ip);
+            threadPool.execute(new TCPListner(nodeService,false,name));
             return "node "+name+" with ip address "+ip+" was succesfully added to the node map";
         }
         else
@@ -81,8 +81,7 @@ public class NodeController {
         if (!name.equals("omo")) {
             System.out.println("Ik run nu /HostLocalFile, Variebelen name "+name);
             //Ga thread moete worre
-            TCPListner temp = new TCPListner(nodeService);
-            temp.sendTCP(name);
+            threadPool.execute( new TCPListner(nodeService,true,name));
             return "node "+name+" with ip address was succesfully added to the node map";
         }
         else
