@@ -18,13 +18,13 @@ public class TCPListner implements Runnable{
         Socket sr = s.accept();
         FileInputStream fr = null;
         if(nodeService.name.equals("host2"))
-            fr = new FileInputStream("src/localFileHost1/"+file);
+            fr = new FileInputStream("/home/pi/ReplicationNode/src/localFileHost1/"+file);
         if(nodeService.name.equals("host3"))
-            fr = new FileInputStream("src/localFileHost2/"+file);
+            fr = new FileInputStream("/home/pi/ReplicationNode/src/localFileHost2/"+file);
         if(nodeService.name.equals("host4"))
-            fr = new FileInputStream("src/localFileHost3/"+file);
+            fr = new FileInputStream("/home/pi/ReplicationNode/src/localFileHost3/"+file);
         if(nodeService.name.equals("host5"))
-            fr = new FileInputStream("src/localFileHost4/"+file);
+            fr = new FileInputStream("/home/pi/ReplicationNode/src/localFileHost4/"+file);
 
         byte b[] = new byte[5000];
         fr.read(b,0,b.length);
@@ -36,12 +36,12 @@ public class TCPListner implements Runnable{
         Socket sr = s.accept();
         FileInputStream fr = null;
         if(nodeService.name.equals("host2"))
-            fr = new FileInputStream("src/replicatedFiles/"+file);
+            fr = new FileInputStream("/home/pi/ReplicationNode/src/replicatedFiles/"+file);
         byte b[] = new byte[5000];
         fr.read(b,0,b.length);
         OutputStream os = sr.getOutputStream();
         os.write(b,0,b.length);
-        File temp = new File("src/replicatedFiles/"+file);
+        File temp = new File("/home/pi/ReplicationNode/src/replicatedFiles/"+file);
         temp.delete();
     }
 
