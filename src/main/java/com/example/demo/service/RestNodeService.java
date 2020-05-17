@@ -73,7 +73,7 @@ public class RestNodeService {
 
     //Check locally stored files
     private void chekFiles() throws IOException {
-        System.out.println("ik run nu chek files");
+        System.out.println("ik run nu chek files en mijne naam is "+name);
         //
         File folder = null;
         if (name.equals("host2"))
