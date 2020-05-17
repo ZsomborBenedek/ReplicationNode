@@ -45,7 +45,10 @@ public class MulticastListner implements Runnable {
                 if (nodeService.hashfunction(temp.get(0),true) > nodeService.hashfunction(nodeService.name,true)) {
                     System.out.println("Ik ben nie meer de hoogste");
                     nodeService.isHoogste = false;
+                    URL connection5 = new URL("http://" + temp.get(1) + ":9000/IsHighest?Highest=true");
+                    connection5.openConnection().getInputStream();
                     //
+                    /*
                     Thread.sleep(500);
                     URL connection3 = new URL("http://" + temp.get(1) + ":9000/SetPrevious?name=" + nodeService.name + "&ip=" + nodeService.thisIp);
                     connection3.openConnection().getInputStream();
@@ -56,12 +59,17 @@ public class MulticastListner implements Runnable {
                     System.out.println(temp.get(0)+" is nu de hoogst gehashte node");
                     //
                     System.out.println(temp.get(0)+" is nu de hoogst gehashte node");
+
+                     */
                 }
                 if(nodeService.isLaagste)
                     if (nodeService.hashfunction(temp.get(0),true) < nodeService.hashfunction(nodeService.name,true)) {
                         System.out.println("Ik ben nie meer de laagste");
                         nodeService.isLaagste = false;
+                        URL connection5 = new URL("http://" + temp.get(1) + ":9000/IsLowest?Lowest=true");
+                        connection5.openConnection().getInputStream();
                         //
+                        /*
                         Thread.sleep(500);
                         URL connection3 = new URL("http://" + temp.get(1) + ":9000/SetNext?name=" + nodeService.name + "&ip=" + nodeService.thisIp);
                         connection3.openConnection().getInputStream();
@@ -72,6 +80,8 @@ public class MulticastListner implements Runnable {
                         System.out.println(temp.get(0)+" is nu de Laagst gehashte node");
                         //
                         System.out.println(temp.get(0)+" is nu de Laagst gehashte node");
+
+                         */
                     }
                 nodeService.next = temp.get(0);
                 nodeService.nextIP = temp.get(1);
@@ -85,6 +95,10 @@ public class MulticastListner implements Runnable {
                     if (nodeService.hashfunction(temp.get(0),true) > nodeService.hashfunction(nodeService.name,true)) {
                         System.out.println("Ik ben nie meer de hoogste");
                         nodeService.isHoogste = false;
+                        nodeService.next = temp.get(0);
+                        nodeService.nextIP = temp.get(1);
+                        System.out.println("Ik stel next nu in als "+temp.get(0)+" "+temp.get(1));
+                        System.out.println("Mijne next is nu "+nodeService.next+" "+nodeService.nextIP);
                         Thread.sleep(500);
                         URL connection = new URL("http://" + temp.get(1) + ":9000/SetPrevious?name=" + nodeService.name + "&ip=" + nodeService.thisIp);
                         connection.openConnection().getInputStream();
@@ -98,6 +112,10 @@ public class MulticastListner implements Runnable {
                     if (nodeService.hashfunction(temp.get(0),true) < nodeService.hashfunction(nodeService.name,true)) {
                         System.out.println("Ik ben nie meer de laagste");
                         nodeService.isLaagste = false;
+                        nodeService.previous = temp.get(0);
+                        nodeService.previousIP = temp.get(1);
+                        System.out.println("Ik stel previous nu in als "+temp.get(0)+" "+temp.get(1));
+                        System.out.println("Mijne previous is nu "+nodeService.previous+" "+nodeService.previousIP);
                         Thread.sleep(500);
                         URL connection = new URL("http://" + temp.get(1) + ":9000/SetNext?name=" + nodeService.name + "&ip=" + nodeService.thisIp);
                         connection.openConnection().getInputStream();

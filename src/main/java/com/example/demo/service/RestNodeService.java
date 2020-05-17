@@ -183,14 +183,18 @@ public class RestNodeService {
         setupb = true;
         System.out.println(setupb);
     }
-    public void setHighest(){
+    public void setHighest() throws IOException {
         System.out.println("Ik ben nu den hoogste zne");
         isHoogste = true;
+        URL connection = new URL("http://" + nextIP + ":9000/SetPrevious?name=" + name + "&ip=" + thisIp);
+        connection.openConnection().getInputStream();
         System.out.println(isHoogste);
     }
-    public void setLowest(){
+    public void setLowest() throws IOException {
         System.out.println("ik ben nu de laagste zne");
         isLaagste = true;
+        URL connection = new URL("http://" + previousIP + ":9000/SetNext?name=" + name + "&ip=" + thisIp);
+        connection.openConnection().getInputStream();
         System.out.println(isLaagste);
     }
 
