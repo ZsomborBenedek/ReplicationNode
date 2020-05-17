@@ -137,6 +137,7 @@ public class RestNodeService {
         is.read(b,0,b.length);
         fr.write(b,0,b.length);
         System.out.println("ontvange is kleir");
+        sr.close();
     }
 
     //ShutDown

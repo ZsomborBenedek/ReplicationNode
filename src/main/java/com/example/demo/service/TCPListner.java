@@ -31,6 +31,7 @@ public class TCPListner implements Runnable{
         OutputStream os = sr.getOutputStream();
         os.write(b,0,b.length);
         System.out.println("versture is kleir");
+        s.close();
     }
     public void transferTCP() throws IOException {
         ServerSocket s = new ServerSocket(6667);
@@ -45,6 +46,7 @@ public class TCPListner implements Runnable{
         File temp = new File("/home/pi/ReplicationNode/src/replicatedFiles/"+file);
         temp.delete();
         System.out.println("transfer is kleir");
+        s.close();
     }
 
     @Override
