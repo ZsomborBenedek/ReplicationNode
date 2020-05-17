@@ -15,7 +15,7 @@ public class MulticastListner implements Runnable {
     }
 
 
-    private ArrayList<String> getNameAndIp(String msg) throws IOException {
+    private ArrayList<String> getNameAndIp(String msg) throws IOException, InterruptedException {
         System.out.println("ik run nu get name and ip met msg " + msg);
         ArrayList<String> temp = new ArrayList<>();
         if (msg.contains("newNode")) {
@@ -29,6 +29,7 @@ public class MulticastListner implements Runnable {
         if (nodeService.setupb) {
             if (nodeService.first) {
                 System.out.println("de tweede is erbij");
+                Thread.sleep(500);
                 //Hier rest shit set previous
                 //sendUDPMessage("previous " + name + "::ip " + thisIp, temp.get(1), 10000);
                 URL connection = new URL("http://" + temp.get(1) + ":9000/SetPrevious?Name=" + nodeService.name + "&ip=" + nodeService.thisIp);
@@ -50,6 +51,7 @@ public class MulticastListner implements Runnable {
                 nodeService.first = false;
             } else {
                 if (nodeService.hashfunction(nodeService.name, true) < nodeService.hashfunction(temp.get(0), true) && nodeService.hashfunction(temp.get(0), true) < nodeService.hashfunction(nodeService.next, true)) {
+                    Thread.sleep(500);
                     URL connection = new URL("http://" + temp.get(1) + ":9000/SetPrevious?Name=" + nodeService.name + "&ip=" + nodeService.thisIp);
                     //
                     connection.openConnection().getInputStream();
@@ -60,6 +62,7 @@ public class MulticastListner implements Runnable {
                     System.out.println("Mijne previous is nu " + nodeService.previous + " " + nodeService.previousIP);
                 }
                 if (nodeService.hashfunction(nodeService.previous, true) < nodeService.hashfunction(temp.get(0), true) && nodeService.hashfunction(temp.get(0), true) < nodeService.hashfunction(nodeService.name, true)) {
+                    Thread.sleep(500);
                     URL connection2 = new URL("http://" + temp.get(1) + ":9000/SetNext?Name=" + nodeService.name + "&ip=" + nodeService.thisIp);
                     connection2.openConnection().getInputStream();
                     //
@@ -76,7 +79,7 @@ public class MulticastListner implements Runnable {
         return null;
     }
     public void receiveUDPMessage(String ip, int port) throws
-            IOException {
+            IOException, InterruptedException {
         byte[] buffer = new byte[1024];
         MulticastSocket socket = new MulticastSocket(port);
         InetAddress group = InetAddress.getByName("230.0.0.0");
@@ -108,7 +111,7 @@ public class MulticastListner implements Runnable {
     public void run() {
         try {
             receiveUDPMessage("230.0.0.0", 10000);
-        } catch (IOException ex) {
+        } catch (IOException | InterruptedException ex) {
             ex.printStackTrace();
         }
     }
