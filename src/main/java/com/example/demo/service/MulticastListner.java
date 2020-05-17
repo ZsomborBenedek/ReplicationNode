@@ -65,7 +65,7 @@ public class MulticastListner implements Runnable {
                     Thread.sleep(500);
                     URL connection2 = new URL("http://" + temp.get(1) + ":9000/SetNext?name=" + nodeService.name + "&ip=" + nodeService.thisIp);
                     connection2.openConnection().getInputStream();
-                    //
+                    //haha
                     nodeService.previous = temp.get(0);
                     nodeService.previousIP = temp.get(1);
                     System.out.println("Mijne next is nu " + nodeService.next + " " + nodeService.nextIP);
