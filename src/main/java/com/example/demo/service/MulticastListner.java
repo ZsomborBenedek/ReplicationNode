@@ -8,7 +8,6 @@ import java.util.ArrayList;
 public class MulticastListner implements Runnable {
 
     RestNodeService nodeService;
-    boolean setupb;
     boolean first = false;
 
 
@@ -21,14 +20,14 @@ public class MulticastListner implements Runnable {
         System.out.println("ik run nu get name and ip met msg " + msg);
         ArrayList<String> temp = new ArrayList<>();
         if (msg.contains("newNode")) {
-            System.out.println("Mijne setupB is hier "+setupb);
+            System.out.println("Mijne setupB is hier "+nodeService.setupb);
             String haha = msg.replace("newNode ", "");
             if (!haha.isEmpty()) {
                 String[] tokens = haha.split("::");
                 for (String t : tokens)
                     temp.add(t);
             }
-        if (setupb) {
+        if (nodeService.setupb) {
             if (first) {
                 System.out.println("de tweede is erbij");
                 //Hier rest shit set previous
