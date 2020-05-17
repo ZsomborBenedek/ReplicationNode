@@ -173,7 +173,9 @@ public class RestNodeService {
             nextIP = previousIP = thisIp;
             first = true;
         }
+        System.out.println("Hier zet ik mijne setupB op true");
         setupb = true;
+        System.out.println(setupb);
     }
 
     //Hashfunction, boolean specifies if the string is a node or not
