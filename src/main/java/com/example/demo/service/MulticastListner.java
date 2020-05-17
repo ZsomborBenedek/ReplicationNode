@@ -32,12 +32,12 @@ public class MulticastListner implements Runnable {
                 Thread.sleep(500);
                 //Hier rest shit set previous
                 //sendUDPMessage("previous " + name + "::ip " + thisIp, temp.get(1), 10000);
-                URL connection = new URL("http://" + temp.get(1) + ":9000/SetPrevious?Name=" + nodeService.name + "&ip=" + nodeService.thisIp);
+                URL connection = new URL("http://" + temp.get(1) + ":9000/SetPrevious?name=" + nodeService.name + "&ip=" + nodeService.thisIp);
                 //Mogenlijk Zo reply opvangen?
                 connection.openConnection().getInputStream();
                 //
                 //sendUDPMessage("next " + name + "::ip " + thisIp, temp.get(1), 10000);
-                URL connection2 = new URL("http://" + temp.get(1) + ":9000/SetNext?Name=" + nodeService.name + "&ip=" + nodeService.thisIp);
+                URL connection2 = new URL("http://" + temp.get(1) + ":9000/SetNext?name=" + nodeService.name + "&ip=" + nodeService.thisIp);
                 //
                 connection2.openConnection().getInputStream();
                 //
