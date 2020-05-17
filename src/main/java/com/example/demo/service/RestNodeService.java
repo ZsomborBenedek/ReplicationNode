@@ -131,7 +131,7 @@ public class RestNodeService {
         System.out.println("ik run nu receive tcp met variabelen ip "+ip+" filename "+filename);
         Thread.sleep(500);
         byte [] b = new byte[5000];
-        Socket sr = new Socket(ip,69696);
+        Socket sr = new Socket(ip,6969);
         InputStream is = sr.getInputStream();
         FileOutputStream fr = new FileOutputStream("/home/pi/ReplicationNode/src/replicatedFiles"+filename);
         is.read(b,0,b.length);
