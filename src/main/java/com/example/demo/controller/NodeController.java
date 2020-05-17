@@ -65,12 +65,23 @@ public class NodeController {
         else
             return"adding new node failed";
     }
+    @GetMapping("/TransferReplicatedFile")
+    public String transferReplicatedFile (@RequestParam(value = "name", defaultValue = "omo") String name,@RequestParam(value = "ownerIP", defaultValue = "omo") String ip) throws IOException {
+        if (!name.equals("omo") && !ip.equals("omo")) {
+            System.out.println("Ik run nu /TransferReplicatedFile, Variebelen name "+name+" ownerIP "+ip);
+            TCPListner temp = new TCPListner(nodeService);
+            temp.transferTCP(name);
+            return "node "+name+" with ip address "+ip+" was succesfully added to the node map";
+        }
+        else
+            return"adding new node failed";
+    }
     @GetMapping("/HostLocalFile")
     public String hostLocalFile (@RequestParam(value = "FileName", defaultValue = "omo") String name) throws IOException {
         if (!name.equals("omo")) {
             System.out.println("Ik run nu /HostLocalFile, Variebelen name "+name);
             //Ga thread moete worre
-            TCPListner temp = new TCPListner();
+            TCPListner temp = new TCPListner(nodeService);
             temp.sendTCP(name);
             return "node "+name+" with ip address was succesfully added to the node map";
         }
