@@ -171,6 +171,8 @@ public class RestNodeService {
         String haha = msg.replace("nodeCount ","");
         if(Integer.parseInt(haha)<=1){
             System.out.println("ik ben de eerste");
+            System.out.println("ik ben de Hoogste");
+            System.out.println("ik ben de Laagste");
             next = previous = name;
             nextIP = previousIP = thisIp;
             first = true;
@@ -181,14 +183,14 @@ public class RestNodeService {
         setupb = true;
         System.out.println(setupb);
     }
-    public void setHighest(boolean value){
+    public void setHighest(){
         System.out.println("Ik ben nu den hoogste zne");
-        isHoogste = value;
+        isHoogste = true;
         System.out.println(isHoogste);
     }
-    public void setLowest(boolean value){
+    public void setLowest(){
         System.out.println("ik ben nu de laagste zne");
-        isLaagste = value;
+        isLaagste = true;
         System.out.println(isLaagste);
     }
 

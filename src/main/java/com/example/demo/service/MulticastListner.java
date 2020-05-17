@@ -43,6 +43,7 @@ public class MulticastListner implements Runnable {
                 //
                 if(nodeService.isHoogste)
                 if (nodeService.hashfunction(temp.get(0),true) > nodeService.hashfunction(nodeService.name,true)) {
+                    System.out.println("Ik ben nie meer de hoogste");
                     nodeService.isHoogste = false;
                     //
                     Thread.sleep(500);
@@ -58,6 +59,7 @@ public class MulticastListner implements Runnable {
                 }
                 if(nodeService.isLaagste)
                     if (nodeService.hashfunction(temp.get(0),true) < nodeService.hashfunction(nodeService.name,true)) {
+                        System.out.println("Ik ben nie meer de laagste");
                         nodeService.isLaagste = false;
                         //
                         Thread.sleep(500);
@@ -81,6 +83,7 @@ public class MulticastListner implements Runnable {
             } else {
                 if(nodeService.isHoogste)
                     if (nodeService.hashfunction(temp.get(0),true) > nodeService.hashfunction(nodeService.name,true)) {
+                        System.out.println("Ik ben nie meer de hoogste");
                         nodeService.isHoogste = false;
                         Thread.sleep(500);
                         URL connection = new URL("http://" + temp.get(1) + ":9000/SetPrevious?name=" + nodeService.name + "&ip=" + nodeService.thisIp);
@@ -93,6 +96,7 @@ public class MulticastListner implements Runnable {
                     }
                 if(nodeService.isLaagste)
                     if (nodeService.hashfunction(temp.get(0),true) < nodeService.hashfunction(nodeService.name,true)) {
+                        System.out.println("Ik ben nie meer de laagste");
                         nodeService.isLaagste = false;
                         Thread.sleep(500);
                         URL connection = new URL("http://" + temp.get(1) + ":9000/SetNext?name=" + nodeService.name + "&ip=" + nodeService.thisIp);

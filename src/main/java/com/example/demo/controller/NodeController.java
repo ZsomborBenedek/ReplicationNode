@@ -82,7 +82,8 @@ public class NodeController {
         if (!value.equals("omo")) {
             System.out.println("Ik run nu /IsHighest, Variebelen value "+value);
             //Ga thread moete worre
-            nodeService.setHighest(Boolean.getBoolean(value));
+            if(value.equals("true"))
+            nodeService.setHighest();
             return "node "+value+" with ip address was succesfully added to the node map";
         }
         else
@@ -93,7 +94,8 @@ public class NodeController {
         if (!value.equals("omo")) {
             System.out.println("Ik run nu /IsLowest, Variebelen value "+value);
             //Ga thread moete worre
-            nodeService.setLowest(Boolean.getBoolean(value));
+            if (value.equals("true"))
+            nodeService.setLowest();
             return "node "+value+" with ip address was succesfully added to the node map";
         }
         else
