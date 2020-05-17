@@ -56,8 +56,8 @@ public class RestNodeService {
         if (!name.isEmpty() && !ip.isEmpty()) {
             next = name;
             nextIP = ip;
-            System.out.println("Ik stel previous nu in als "+name+" "+ip);
-            System.out.println("Mijne previous is nu "+next+" "+nextIP);
+            System.out.println("Ik stel next nu in als "+name+" "+ip);
+            System.out.println("Mijne next is nu "+next+" "+nextIP);
         }
     }
 
@@ -182,10 +182,14 @@ public class RestNodeService {
         System.out.println(setupb);
     }
     public void setHighest(boolean value){
+        System.out.println("Ik ben nu den hoogste zne");
         isHoogste = value;
+        System.out.println(isHoogste);
     }
     public void setLowest(boolean value){
+        System.out.println("ik ben nu de laagste zne");
         isLaagste = value;
+        System.out.println(isLaagste);
     }
 
 
