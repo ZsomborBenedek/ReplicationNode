@@ -77,13 +77,13 @@ public class RestNodeService {
         //
         File folder = null;
         if (name.equals("host2"))
-        folder = new File("/home/pi/ReplicationNode/src/localFilesHost1");
+            folder = new File("/home/pi/ReplicationNode/src/localFilesHost1");
         if (name.equals("host3"))
-            folder = new File("/home/pi/ReplicationNode/src/localFilesHost2");
+            folder = new File("/home/pi/ReplicationNode/src/LocalFilesHost2");
         if (name.equals("host4"))
-            folder = new File("/home/pi/ReplicationNode/src/localFilesHost3");
+            folder = new File("/home/pi/ReplicationNode/src/LocalFilesHost3");
         if (name.equals("host5"))
-            folder = new File("/home/pi/ReplicationNode/src/localFilesHost4");
+            folder = new File("/home/pi/ReplicationNode/src/LocalFilesHost4");
         //File folder = new File("C:\\Users\\Arla\\Desktop\\RestfullNode\\src\\localFiles");
         File[] listOfFiles = folder.listFiles();
 
