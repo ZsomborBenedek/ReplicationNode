@@ -80,7 +80,7 @@ public class NodeController {
     public String hostLocalFile (@RequestParam(value = "FileName", defaultValue = "omo") String name) throws IOException {
         if (!name.equals("omo")) {
             System.out.println("Ik run nu /HostLocalFile, Variebelen name "+name);
-            //Ga thread moete worre
+            //Ga thread moete worrexx
             threadPool.execute( new TCPListner(nodeService,true,name));
             return "node "+name+" with ip address was succesfully added to the node map";
         }
