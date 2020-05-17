@@ -18,13 +18,13 @@ public class TCPListner implements Runnable{
         Socket sr = s.accept();
         FileInputStream fr = null;
         if(nodeService.name.equals("host2"))
-            fr = new FileInputStream("/home/pi/ReplicationNode/src/localFileHost1/"+file);
+            fr = new FileInputStream("/home/pi/ReplicationNode/src/localFilesHost1/"+file);
         if(nodeService.name.equals("host3"))
-            fr = new FileInputStream("/home/pi/ReplicationNode/src/localFileHost2/"+file);
+            fr = new FileInputStream("/home/pi/ReplicationNode/src/LocalFilesHost2/"+file);
         if(nodeService.name.equals("host4"))
-            fr = new FileInputStream("/home/pi/ReplicationNode/src/localFileHost3/"+file);
+            fr = new FileInputStream("/home/pi/ReplicationNode/src/LocalFilesHost3/"+file);
         if(nodeService.name.equals("host5"))
-            fr = new FileInputStream("/home/pi/ReplicationNode/src/localFileHost4/"+file);
+            fr = new FileInputStream("/home/pi/ReplicationNode/src/LocalFilesHost4/"+file);
 
         byte b[] = new byte[5000];
         fr.read(b,0,b.length);
