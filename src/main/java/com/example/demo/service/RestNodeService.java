@@ -208,7 +208,7 @@ public class RestNodeService {
             hash = 3 * hash + name.charAt(i);
             temp = temp+ name.charAt(i);
         }
-
+        hash = hash+temp;
         if (node) {
         }
         else
