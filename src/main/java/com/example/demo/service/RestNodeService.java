@@ -94,8 +94,8 @@ public class RestNodeService {
                 String bestand = listOfFiles[i].getName().replace("Files\\","");
                 String[] temp = bestand.split("\\.");
                 files.add(temp[0]);
-                System.out.println("Ik heb file "+temp[0]+" lokaal staan bruur.");
-                URL connection2 = new URL("http://"+nameServerIP+":10000/AddFile?Name="+name+"&File="+temp[0]);
+                System.out.println("Ik heb file "+bestand+" lokaal staan bruur.");
+                URL connection2 = new URL("http://"+nameServerIP+":10000/AddFile?Name="+name+"&File="+bestand);
                 connection2.openConnection().getInputStream();
             } else if (listOfFiles[i].isDirectory()) {
                 System.out.println("Directory " + listOfFiles[i].getName());
