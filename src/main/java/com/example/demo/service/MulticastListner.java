@@ -18,28 +18,27 @@ public class MulticastListner implements Runnable {
 
 
     private ArrayList<String> getNameAndIp(String msg) throws IOException {
-        System.out.println("ik run nu get name and ip met msg "+msg);
+        System.out.println("ik run nu get name and ip met msg " + msg);
         ArrayList<String> temp = new ArrayList<>();
         if (msg.contains("newNode")) {
+            System.out.println("Mijne setupB is hier "+setupb);
             String haha = msg.replace("newNode ", "");
             if (!haha.isEmpty()) {
                 String[] tokens = haha.split("::");
                 for (String t : tokens)
                     temp.add(t);
             }
-
-        }
         if (setupb) {
             if (first) {
                 System.out.println("de tweede is erbij");
                 //Hier rest shit set previous
                 //sendUDPMessage("previous " + name + "::ip " + thisIp, temp.get(1), 10000);
-                URL connection = new URL("http://"+temp.get(1)+":9000/SetPrevious?Name="+nodeService.name+"&ip="+nodeService.thisIp);
+                URL connection = new URL("http://" + temp.get(1) + ":9000/SetPrevious?Name=" + nodeService.name + "&ip=" + nodeService.thisIp);
                 //Mogenlijk Zo reply opvangen?
                 connection.openConnection().getInputStream();
                 //
                 //sendUDPMessage("next " + name + "::ip " + thisIp, temp.get(1), 10000);
-                URL connection2 = new URL("http://"+temp.get(1)+":9000/SetNext?Name="+nodeService.name+"&ip="+nodeService.thisIp);
+                URL connection2 = new URL("http://" + temp.get(1) + ":9000/SetNext?Name=" + nodeService.name + "&ip=" + nodeService.thisIp);
                 //
                 connection2.openConnection().getInputStream();
                 //
@@ -48,32 +47,35 @@ public class MulticastListner implements Runnable {
                 nodeService.nextIP = temp.get(1);
                 nodeService.previous = temp.get(0);
                 nodeService.previousIP = temp.get(1);
-                System.out.println("Mijne next is nu "+nodeService.next+" "+nodeService.nextIP);
-                System.out.println("Mijne previous is nu "+nodeService.previous+" "+nodeService.previousIP);
+                System.out.println("Mijne next is nu " + nodeService.next + " " + nodeService.nextIP);
+                System.out.println("Mijne previous is nu " + nodeService.previous + " " + nodeService.previousIP);
                 first = false;
             } else {
                 if (nodeService.hashfunction(nodeService.name, true) < nodeService.hashfunction(temp.get(0), true) && nodeService.hashfunction(temp.get(0), true) < nodeService.hashfunction(nodeService.next, true)) {
-                    URL connection = new URL("http://"+temp.get(1)+":9000/SetPrevious?Name="+nodeService.name+"&ip="+nodeService.thisIp);
+                    URL connection = new URL("http://" + temp.get(1) + ":9000/SetPrevious?Name=" + nodeService.name + "&ip=" + nodeService.thisIp);
                     //
                     connection.openConnection().getInputStream();
                     //
                     nodeService.next = temp.get(0);
                     nodeService.nextIP = temp.get(1);
-                    System.out.println("Mijne next is nu "+nodeService.next+" "+nodeService.nextIP);
-                    System.out.println("Mijne previous is nu "+nodeService.previous+" "+nodeService.previousIP);
+                    System.out.println("Mijne next is nu " + nodeService.next + " " + nodeService.nextIP);
+                    System.out.println("Mijne previous is nu " + nodeService.previous + " " + nodeService.previousIP);
                 }
                 if (nodeService.hashfunction(nodeService.previous, true) < nodeService.hashfunction(temp.get(0), true) && nodeService.hashfunction(temp.get(0), true) < nodeService.hashfunction(nodeService.name, true)) {
-                    URL connection2 = new URL("http://"+temp.get(1)+":9000/SetNext?Name="+nodeService.name+"&ip="+nodeService.thisIp);
+                    URL connection2 = new URL("http://" + temp.get(1) + ":9000/SetNext?Name=" + nodeService.name + "&ip=" + nodeService.thisIp);
                     connection2.openConnection().getInputStream();
                     //
                     nodeService.previous = temp.get(0);
                     nodeService.previousIP = temp.get(1);
-                    System.out.println("Mijne next is nu "+nodeService.next+" "+nodeService.nextIP);
-                    System.out.println("Mijne previous is nu "+nodeService.previous+" "+nodeService.previousIP);
+                    System.out.println("Mijne next is nu " + nodeService.next + " " + nodeService.nextIP);
+                    System.out.println("Mijne previous is nu " + nodeService.previous + " " + nodeService.previousIP);
                 }
             }
         }
         return temp;
+    }
+        System.out.println("FOUTJJJJJJJEEEEEEEEEEEEEEEEEEEEEEEEE");
+        return null;
     }
     public void receiveUDPMessage(String ip, int port) throws
             IOException {
