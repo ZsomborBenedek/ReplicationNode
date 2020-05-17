@@ -187,10 +187,8 @@ public class RestNodeService {
             hash = 3 * hash + name.charAt(i);
             temp = temp+ name.charAt(i);
         }
-        hash = hash/(temp/7);
 
         if (node) {
-            hash = (hash) / (5);
         }
         else
             hash = hash/53;
