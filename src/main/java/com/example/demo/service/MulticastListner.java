@@ -95,8 +95,7 @@ public class MulticastListner implements Runnable {
                     if (nodeService.hashfunction(temp.get(0),true) > nodeService.hashfunction(nodeService.name,true)) {
                         System.out.println("Ik ben nie meer de hoogste");
                         nodeService.isHoogste = false;
-                        System.out.println("Ik stel next nu in als "+temp.get(0)+" "+temp.get(1));
-                        System.out.println("Mijne next is nu "+nodeService.next+" "+nodeService.nextIP);
+
                         Thread.sleep(500);
                         URL connection = new URL("http://" + temp.get(1) + ":9000/SetPrevious?name=" + nodeService.name + "&ip=" + nodeService.thisIp);
                         connection.openConnection().getInputStream();
@@ -107,14 +106,15 @@ public class MulticastListner implements Runnable {
                         System.out.println(temp.get(0)+" is nu de hoogst gehashte node");
                         nodeService.next = temp.get(0);
                         nodeService.nextIP = temp.get(1);
+                        System.out.println("Ik stel next nu in als "+temp.get(0)+" "+temp.get(1));
+                        System.out.println("Mijne next is nu "+nodeService.next+" "+nodeService.nextIP);
                     }
                 if(nodeService.isLaagste)
                     if (nodeService.hashfunction(temp.get(0),true) < nodeService.hashfunction(nodeService.name,true)) {
                         System.out.println("Ik ben nie meer de laagste");
                         nodeService.isLaagste = false;
 
-                        System.out.println("Ik stel previous nu in als "+temp.get(0)+" "+temp.get(1));
-                        System.out.println("Mijne previous is nu "+nodeService.previous+" "+nodeService.previousIP);
+
                         Thread.sleep(500);
                         URL connection = new URL("http://" + temp.get(1) + ":9000/SetNext?name=" + nodeService.name + "&ip=" + nodeService.thisIp);
                         connection.openConnection().getInputStream();
@@ -125,6 +125,8 @@ public class MulticastListner implements Runnable {
                         System.out.println(temp.get(0)+" is nu de Laagst gehashte node");
                         nodeService.previous = temp.get(0);
                         nodeService.previousIP = temp.get(1);
+                        System.out.println("Ik stel previous nu in als "+temp.get(0)+" "+temp.get(1));
+                        System.out.println("Mijne previous is nu "+nodeService.previous+" "+nodeService.previousIP);
                     }
                 System.out.println("Meer dan 2 int netwerk mateke");
                 System.out.println("hashfunctie van "+nodeService.name+": "+nodeService.hashfunction(nodeService.name,true)+", en hashfunctie van de nieuwe "+temp.get(0)+": "+nodeService.hashfunction(temp.get(0),true));
