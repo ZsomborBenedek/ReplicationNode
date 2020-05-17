@@ -41,7 +41,22 @@ public class MulticastListner implements Runnable {
                 //
                 connection2.openConnection().getInputStream();
                 //
-
+                if(nodeService.isHoogste)
+                if (nodeService.hashfunction(temp.get(0),true) > nodeService.hashfunction(nodeService.name,true)) {
+                    nodeService.isHoogste = false;
+                    //
+                    //STUUR NAAR NODE DA HIJ DE HOOGSTE IS
+                    //
+                    System.out.println(temp.get(0)+" is nu de hoogst gehashte node");
+                }
+                if(nodeService.isLaagste)
+                    if (nodeService.hashfunction(temp.get(0),true) < nodeService.hashfunction(nodeService.name,true)) {
+                        nodeService.isLaagste = false;
+                        //
+                        //STUUR NAAR NODE DA HIJ DE Laagste IS
+                        //
+                        System.out.println(temp.get(0)+" is nu de Laagst gehashte node");
+                    }
                 nodeService.next = temp.get(0);
                 nodeService.nextIP = temp.get(1);
                 nodeService.previous = temp.get(0);
@@ -50,6 +65,30 @@ public class MulticastListner implements Runnable {
                 System.out.println("Mijne previous is nu " + nodeService.previous + " " + nodeService.previousIP);
                 nodeService.first = false;
             } else {
+                if(nodeService.isHoogste)
+                    if (nodeService.hashfunction(temp.get(0),true) > nodeService.hashfunction(nodeService.name,true)) {
+                        nodeService.isHoogste = false;
+                        Thread.sleep(500);
+                        URL connection = new URL("http://" + temp.get(1) + ":9000/SetPrevious?name=" + nodeService.name + "&ip=" + nodeService.thisIp);
+                        connection.openConnection().getInputStream();
+                        URL connection2 = new URL("http://" + temp.get(1) + ":9000/SetNext?name=" + nodeService.next + "&ip=" + nodeService.nextIP);
+                        connection2.openConnection().getInputStream();
+                        URL connection3 = new URL("http://" + temp.get(1) + ":9000/IsHighest?Highest=true");
+                        connection3.openConnection().getInputStream();
+                        System.out.println(temp.get(0)+" is nu de hoogst gehashte node");
+                    }
+                if(nodeService.isLaagste)
+                    if (nodeService.hashfunction(temp.get(0),true) < nodeService.hashfunction(nodeService.name,true)) {
+                        nodeService.isLaagste = false;
+                        Thread.sleep(500);
+                        URL connection = new URL("http://" + temp.get(1) + ":9000/SetNext?name=" + nodeService.name + "&ip=" + nodeService.thisIp);
+                        connection.openConnection().getInputStream();
+                        URL connection2 = new URL("http://" + temp.get(1) + ":9000/SetPrevious?name=" + nodeService.previous + "&ip=" + nodeService.previousIP);
+                        connection2.openConnection().getInputStream();
+                        URL connection3 = new URL("http://" + temp.get(1) + ":9000/IsLowest?Lowest=true");
+                        connection3.openConnection().getInputStream();
+                        System.out.println(temp.get(0)+" is nu de Laagst gehashte node");
+                    }
                 System.out.println("Meer dan 2 int netwerk mateke");
                 System.out.println("hashfunctie van "+nodeService.name+": "+nodeService.hashfunction(nodeService.name,true)+", en hashfunctie van de nieuwe "+temp.get(0)+": "+nodeService.hashfunction(temp.get(0),true));
                 if (nodeService.hashfunction(nodeService.name, true) < nodeService.hashfunction(temp.get(0), true) && nodeService.hashfunction(temp.get(0), true) < nodeService.hashfunction(nodeService.next, true)) {

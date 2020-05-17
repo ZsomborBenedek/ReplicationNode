@@ -20,6 +20,8 @@ public class RestNodeService {
     ArrayList<String> files = new ArrayList<>();
     boolean first = false;
     boolean running = true;
+    boolean isHoogste = false;
+    boolean isLaagste = false;
 
     public RestNodeService() throws IOException {
         sendUDPMessage("newNode "+name+"::"+thisIp, "230.0.0.0",10000);
@@ -172,11 +174,20 @@ public class RestNodeService {
             next = previous = name;
             nextIP = previousIP = thisIp;
             first = true;
+            isLaagste = true;
+            isHoogste = true;
         }
         System.out.println("Hier zet ik mijne setupB op true");
         setupb = true;
         System.out.println(setupb);
     }
+    public void setHighest(boolean value){
+        isHoogste = value;
+    }
+    public void setLowest(boolean value){
+        isLaagste = value;
+    }
+
 
     //Hashfunction, boolean specifies if the string is a node or not
     public int hashfunction(String name, boolean node) {

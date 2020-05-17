@@ -77,11 +77,33 @@ public class NodeController {
         else
             return"adding new node failed";
     }
+    @GetMapping("/IsHighest")
+    public String isHighest (@RequestParam(value = "Highest", defaultValue = "omo") String value) throws IOException {
+        if (!value.equals("omo")) {
+            System.out.println("Ik run nu /IsHighest, Variebelen value "+value);
+            //Ga thread moete worre
+            nodeService.setHighest(Boolean.getBoolean(value));
+            return "node "+value+" with ip address was succesfully added to the node map";
+        }
+        else
+            return"adding new node failed";
+    }
+    @GetMapping("/IsLowest")
+    public String isLowest (@RequestParam(value = "Lowest", defaultValue = "omo") String value) throws IOException {
+        if (!value.equals("omo")) {
+            System.out.println("Ik run nu /IsHighest, Variebelen value "+value);
+            //Ga thread moete worre
+            nodeService.setLowest(Boolean.getBoolean(value));
+            return "node "+value+" with ip address was succesfully added to the node map";
+        }
+        else
+            return"adding new node failed";
+    }
     @GetMapping("/Kill")
     public String kill () throws IOException {
         System.out.println("Ik run nu /kill");
         nodeService.shutdown();
         return "node "+nodeService.name+" with ip address "+nodeService.thisIp+" was succesfully added to the node map";
-    };
+    }
 
 }
