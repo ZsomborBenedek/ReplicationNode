@@ -39,8 +39,8 @@ public class TCPListner implements Runnable{
         ServerSocket s = new ServerSocket(6667);
         Socket sr = s.accept();
         FileInputStream fr = null;
-        if(nodeService.name.equals("host2"))
-            fr = new FileInputStream("/home/pi/ReplicationNode/src/replicatedFiles/"+file);
+        //if(nodeService.name.equals("host2"))
+        fr = new FileInputStream("/home/pi/ReplicationNode/src/replicatedFiles/"+file);
         byte b[] = new byte[5000];
         fr.read(b,0,b.length);
         OutputStream os = sr.getOutputStream();
