@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class FileChecker implements Runnable {
     RestNodeService nodeService;
-    ArrayList<String> files;
+    ArrayList<String> files = new ArrayList<>();
     public FileChecker(RestNodeService nodeService){
         this.nodeService = nodeService;
     }
