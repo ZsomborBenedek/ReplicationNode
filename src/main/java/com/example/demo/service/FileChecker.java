@@ -14,7 +14,7 @@ public class FileChecker implements Runnable {
     public void chekFiles() throws InterruptedException, IOException {
         Thread.sleep(10000);
             System.out.println("ik run nu chek files in de Filechecker ");
-            files.clear();
+            if(!files.isEmpty()){files.clear();}
             File folder = null;
             if (nodeService.name.equals("host2"))
                 folder = new File("/home/pi/ReplicationNode/src/localFilesHost1");
