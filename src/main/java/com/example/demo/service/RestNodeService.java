@@ -133,7 +133,7 @@ public class RestNodeService {
         byte [] b = new byte[5000];
         Socket sr = new Socket(ip,6969);
         InputStream is = sr.getInputStream();
-        FileOutputStream fr = new FileOutputStream("/home/pi/ReplicationNode/src/replicatedFiles"+filename);
+        FileOutputStream fr = new FileOutputStream("/home/pi/ReplicationNode/src/replicatedFiles/"+filename);
         is.read(b,0,b.length);
         fr.write(b,0,b.length);
         System.out.println("ontvange is kleir");
