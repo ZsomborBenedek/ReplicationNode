@@ -74,9 +74,10 @@ public class RestNodeService {
 
 
     //Check locally stored files
-    private void chekFiles() throws IOException {
+    public void chekFiles() throws IOException {
         System.out.println("ik run nu chek files en mijne naam is "+name);
         //
+        files.clear();
         File folder = null;
         if (name.equals("host2"))
             folder = new File("/home/pi/ReplicationNode/src/localFilesHost1");
@@ -217,5 +218,11 @@ public class RestNodeService {
         else
             hash = hash/53;
         return hash;
+    }
+
+    public void removeReplicatedFile(String file) {
+        File temp = new File("/home/pi/ReplicationNode/src/replicatedFiles/"+file);
+        temp.delete();
+        System.out.println("Replicated File file "+file+" is verwijderd");
     }
 }

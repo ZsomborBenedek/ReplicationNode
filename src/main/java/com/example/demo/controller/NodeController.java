@@ -1,4 +1,5 @@
 package com.example.demo.controller;
+import com.example.demo.service.FileChecker;
 import com.example.demo.service.MulticastListner;
 import com.example.demo.service.RestNodeService;
 import com.example.demo.service.TCPListner;
@@ -21,8 +22,8 @@ public class NodeController {
     @PostConstruct
     public void init() throws IOException {
         nodeService = new RestNodeService();
-
         threadPool.execute(new MulticastListner(nodeService));
+        threadPool.execute(new FileChecker(nodeService));
     }
 
 
@@ -83,6 +84,15 @@ public class NodeController {
             //Ga thread moete worrexx
             threadPool.execute( new TCPListner(nodeService,true,name));
             return "node "+name+" with ip address was succesfully added to the node map";
+        }
+        else
+            return"adding new node failed";
+    }
+    @GetMapping("/RemoveReplicatedFile")
+    public String RemoveReplicatedFile (@RequestParam(value = "File", defaultValue = "omo") String file) throws IOException {
+        if (!file.equals("omo")) {
+            nodeService.removeReplicatedFile(file);
+            return "node "+file+" with ip address "+" was succesfully added to the node map";
         }
         else
             return"adding new node failed";
