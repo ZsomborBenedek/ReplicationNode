@@ -12,7 +12,7 @@ public class FileChecker implements Runnable {
         this.nodeService = nodeService;
     }
     public void chekFiles() throws InterruptedException, IOException {
-        Thread.sleep(1000);
+        Thread.sleep(10000);
             System.out.println("ik run nu chek files in de Filechecker ");
             files.clear();
             File folder = null;
