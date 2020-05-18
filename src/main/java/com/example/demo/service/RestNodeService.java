@@ -25,15 +25,8 @@ public class RestNodeService {
 
     public RestNodeService() throws IOException {
         sendUDPMessage("newNode "+name+"::"+thisIp, "230.0.0.0",10000);
-        System.out.println("dees is mijn naam "+name);
-        System.out.println("dees is mijn ip "+thisIp);
-        //Recieve reply van Namingserver
-        /*
-        */
-        //For lus da alle files een voor een naar de naming server stuurt
-        System.out.println("Opgestart");
-        //False gezet in declatatie nu ipv constructor, niet zeker
-        //setupb = false;
+        System.out.println("My name is "+name);
+        System.out.println("My ip is"+thisIp);
     }
     @PostConstruct
 
@@ -49,15 +42,13 @@ public class RestNodeService {
         socket.send(packet);
         socket.close();
     }
-    //hahahaha
 
     //Parse message to set up new next node
     public void next(String name, String ip){
         if (!name.isEmpty() && !ip.isEmpty()) {
             next = name;
             nextIP = ip;
-            System.out.println("Ik stel next nu in als "+name+" "+ip);
-            System.out.println("Mijne next is nu "+next+" "+nextIP);
+            System.out.println("my new next is "+next+" "+nextIP);
         }
     }
 
@@ -67,16 +58,13 @@ public class RestNodeService {
         if (!name.isEmpty() && !ip.isEmpty()) {
             previous = name;
             previousIP = ip;
-            System.out.println("Ik stel previous nu in als "+name+" "+ip);
-            System.out.println("Mijne previous is nu "+previous+" "+previousIP);
+            System.out.println("my new previous is "+previous+" "+previousIP);
         }
     }
 
 
     //Check locally stored files
     public void chekFiles() throws IOException {
-        System.out.println("ik run nu chek files en mijne naam is "+name);
-        //
         files.clear();
         File folder = null;
         if (name.equals("host2"))
@@ -87,7 +75,6 @@ public class RestNodeService {
             folder = new File("/home/pi/ReplicationNode/src/LocalFilesHost3");
         if (name.equals("host5"))
             folder = new File("/home/pi/ReplicationNode/src/LocalFilesHost4");
-        //File folder = new File("C:\\Users\\Arla\\Desktop\\RestfullNode\\src\\localFiles");
         File[] listOfFiles = folder.listFiles();
 
         for (int i = 0; i < listOfFiles.length; i++) {
@@ -95,7 +82,7 @@ public class RestNodeService {
                 String bestand = listOfFiles[i].getName().replace("Files\\","");
                 String[] temp = bestand.split("\\.");
                 files.add(temp[0]);
-                System.out.println("Ik heb file "+bestand+" lokaal staan bruur.");
+                System.out.println(bestand+"is locally stored");
                 URL connection2 = new URL("http://"+nameServerIP+":10000/AddFile?Name="+name+"&File="+bestand);
                 connection2.openConnection().getInputStream();
             } else if (listOfFiles[i].isDirectory()) {
@@ -136,13 +123,12 @@ public class RestNodeService {
         FileOutputStream fr = new FileOutputStream("/home/pi/ReplicationNode/src/replicatedFiles/"+filename);
         is.read(b,0,b.length);
         fr.write(b,0,b.length);
-        System.out.println("ontvange is kleir");
+        System.out.println("File "+filename+" Recieved");
         sr.close();
     }
 
     //ShutDown
     public void addToNameServer(String ip) throws IOException {
-        System.out.println("Ik run nu addToNameServer, Variebelen ip vn nameserver "+ip);
         nameServerIP = ip;
         URL connection2 = new URL("http://"+ip+":10000/AddNode?Name="+name+"&Ip="+thisIp);
         connection2.openConnection().getInputStream();
@@ -155,7 +141,6 @@ public class RestNodeService {
         BufferedReader in = new BufferedReader(new InputStreamReader(
                 connection2.openStream()));
         String message = in.readLine();
-        System.out.println(message);
         //
 
         URL connection = new URL("http://"+nextIP+":10000/SetPrevious?Name="+previous+"&ip="+previousIP);
@@ -174,32 +159,28 @@ public class RestNodeService {
     void setUp(String msg){
         String haha = msg.replace("nodeCount ","");
         if(Integer.parseInt(haha)<=1){
-            System.out.println("ik ben de eerste");
-            System.out.println("ik ben de Hoogste");
-            System.out.println("ik ben de Laagste");
+            System.out.println("I am  First");
+            System.out.println("I am the highest hashed node");
+            System.out.println("I am the lowest hashed node");
             next = previous = name;
             nextIP = previousIP = thisIp;
             first = true;
             isLaagste = true;
             isHoogste = true;
         }
-        System.out.println("Hier zet ik mijne setupB op true");
         setupb = true;
-        System.out.println(setupb);
     }
     public void setHighest() throws IOException {
-        System.out.println("Ik ben nu den hoogste zne");
+        System.out.println("I am the highest hashed node");
         isHoogste = true;
         URL connection = new URL("http://" + nextIP + ":9000/SetPrevious?name=" + name + "&ip=" + thisIp);
         connection.openConnection().getInputStream();
-        System.out.println(isHoogste);
     }
     public void setLowest() throws IOException {
-        System.out.println("ik ben nu de laagste zne");
+        System.out.println("I am the lowest hashed node");
         isLaagste = true;
         URL connection = new URL("http://" + previousIP + ":9000/SetNext?name=" + name + "&ip=" + thisIp);
         connection.openConnection().getInputStream();
-        System.out.println(isLaagste);
     }
 
 

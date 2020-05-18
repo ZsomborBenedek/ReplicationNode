@@ -14,7 +14,6 @@ public class TCPListner implements Runnable{
         this.file = file;
     }
     public void sendTCP() throws IOException {
-        System.out.println("Ik run nu send tcp met veriabelen mode = "+mode+" en file "+file);
         ServerSocket s = new ServerSocket(6969);
         Socket sr = s.accept();
         FileInputStream fr = null;
@@ -31,11 +30,10 @@ public class TCPListner implements Runnable{
         fr.read(b,0,b.length);
         OutputStream os = sr.getOutputStream();
         os.write(b,0,b.length);
-        System.out.println("versture is kleir");
+        System.out.println("Sending "+file+" completed");
         s.close();
     }
     public void transferTCP() throws IOException {
-        System.out.println("Ik run nu transfer tcp met veriabelen mode = "+mode+" en file "+file);
         ServerSocket s = new ServerSocket(6969);
         Socket sr = s.accept();
         FileInputStream fr = null;
@@ -47,7 +45,7 @@ public class TCPListner implements Runnable{
         os.write(b,0,b.length);
         File temp = new File("/home/pi/ReplicationNode/src/replicatedFiles/"+file);
         temp.delete();
-        System.out.println("transfer is kleir");
+        System.out.println("Sending "+file+" completed");
         s.close();
     }
 
