@@ -36,7 +36,7 @@ public class FileChecker implements Runnable {
                     System.out.println("Directory " + listOfFiles[i].getName());
                 }
             }
-            if (nodeService.files != files){
+            if (!nodeService.files.equals(files)){
                 if(files.size()>nodeService.files.size()) {
                     System.out.println("Der is iet bijgekome peinsk");
                     nodeService.chekFiles();
