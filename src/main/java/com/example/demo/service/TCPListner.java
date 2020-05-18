@@ -36,7 +36,7 @@ public class TCPListner implements Runnable{
     }
     public void transferTCP() throws IOException {
         System.out.println("Ik run nu transfer tcp met veriabelen mode = "+mode+" en file "+file);
-        ServerSocket s = new ServerSocket(6667);
+        ServerSocket s = new ServerSocket(6969);
         Socket sr = s.accept();
         FileInputStream fr = null;
         //if(nodeService.name.equals("host2"))
