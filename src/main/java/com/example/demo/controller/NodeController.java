@@ -69,7 +69,7 @@ public class NodeController {
     @GetMapping("/TransferReplicatedFile")
     public String transferReplicatedFile (@RequestParam(value = "name", defaultValue = "omo") String name) throws IOException {
         if (!name.equals("omo")) {
-            System.out.println("Ik run nu /GetReplicatedFile, Variebelen name "+name+" ownerIP ");
+            System.out.println("Ik run nu /TransferReplicatedFile, Variebelen name "+name+" ownerIP ");
             threadPool.execute(new TCPListner(nodeService,false,name));
             return "node "+name+" with ip address "+" was succesfully added to the node map";
         }
