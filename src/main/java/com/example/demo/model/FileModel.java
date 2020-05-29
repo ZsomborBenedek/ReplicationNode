@@ -21,4 +21,12 @@ public class FileModel {
     public String getNode() {
         return node;
     }
+
+    @Override
+    public String toString() {
+        return "File{" 
+        + "file='" + this.file + '\'' 
+        + ", node='" + this.node + '\'' 
+        + '}';
+    }
 }
