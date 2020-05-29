@@ -14,6 +14,9 @@ public class FileModel {
         this.file = file;
     }
 
+    public FileModel() {
+    }
+
     public String getFile() {
         return file;
     }
