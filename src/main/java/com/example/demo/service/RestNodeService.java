@@ -88,7 +88,7 @@ public class RestNodeService {
 
                 String url = "http://" + nameServerIP + ":10000/AddFile";
                 FileModel file = new FileModel(name, bestand);
-                restTemplate.postForEntity(url, file, FileModel.class);
+                restTemplate.postForEntity(url,  new HttpEntity<FileModel>(file), FileModel.class);
             } else if (listOfFiles[i].isDirectory()) {
                 System.out.println("Directory " + listOfFiles[i].getName());
             }
@@ -138,7 +138,7 @@ public class RestNodeService {
         nameServerIP = ip;
         String url = "http://" + ip + ":10000/AddNode";
         NodeModel node = new NodeModel(name, thisIp);
-        restTemplate.postForEntity(url, node, NodeModel.class);
+        restTemplate.postForEntity(url, new HttpEntity<NodeModel>(node), NodeModel.class);
         chekFiles();
     }
 
