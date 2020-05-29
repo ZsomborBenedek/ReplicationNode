@@ -65,8 +65,9 @@ public class FileChecker implements Runnable {
                 for (String s : temp) {
                     String url = "http://" + nodeService.nameServerIP + ":10000/RemoveFile";
                     FileModel file = new FileModel(nodeService.name, s);
-                    ResponseEntity<FileModel> response = restTemplate.exchange(url, HttpMethod.DELETE, new HttpEntity<FileModel>(file), FileModel.class);
-                    System.out.println(response.toString());
+                    ResponseEntity<FileModel> response = restTemplate.exchange(url, HttpMethod.DELETE,
+                            new HttpEntity<FileModel>(file), FileModel.class);
+                    System.out.println("\n" + response.toString() + "\n");
                 }
                 nodeService.chekFiles();
             }

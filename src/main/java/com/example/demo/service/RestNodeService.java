@@ -89,9 +89,9 @@ public class RestNodeService {
 
                 String url = "http://" + nameServerIP + ":10000/AddFile";
                 FileModel file = new FileModel(name, bestand);
-                ResponseEntity<FileModel> response = restTemplate.postForEntity(url,
-                        new HttpEntity<FileModel>(file), FileModel.class);
-                        System.out.println(response.toString());
+                ResponseEntity<FileModel> response = restTemplate.postForEntity(url, new HttpEntity<FileModel>(file),
+                        FileModel.class);
+                System.out.println("\n" + response.toString() + "\n" + "\n");
 
             } else if (listOfFiles[i].isDirectory()) {
                 System.out.println("Directory " + listOfFiles[i].getName());
@@ -144,7 +144,7 @@ public class RestNodeService {
         NodeModel node = new NodeModel(name, thisIp);
         ResponseEntity<NodeModel> response = restTemplate.postForEntity(url, new HttpEntity<NodeModel>(node),
                 NodeModel.class);
-                System.out.println(response.toString());
+        System.out.println("\n" + response.toString() + "\n");
 
         chekFiles();
     }
@@ -154,13 +154,15 @@ public class RestNodeService {
         //
         String urlNext = "http://" + previousIP + ":10000/SetNext";
         NodeModel nextNode = new NodeModel(next, nextIP);
-        ResponseEntity<NodeModel> responseNext =restTemplate.exchange(urlNext, HttpMethod.PUT, new HttpEntity<NodeModel>(nextNode), NodeModel.class);
-        System.out.println(responseNext.toString());
+        ResponseEntity<NodeModel> responseNext = restTemplate.exchange(urlNext, HttpMethod.PUT,
+                new HttpEntity<NodeModel>(nextNode), NodeModel.class);
+        System.out.println("\n" + responseNext.toString() + "\n");
 
         String urlPrevious = "http://" + nextIP + ":10000/SetPrevious";
         NodeModel previousNode = new NodeModel(previous, previousIP);
-        ResponseEntity<NodeModel> responsePrev =restTemplate.exchange(urlPrevious, HttpMethod.PUT, new HttpEntity<NodeModel>(previousNode), NodeModel.class);
-        System.out.println(responsePrev.toString());
+        ResponseEntity<NodeModel> responsePrev = restTemplate.exchange(urlPrevious, HttpMethod.PUT,
+                new HttpEntity<NodeModel>(previousNode), NodeModel.class);
+        System.out.println("\n" + responsePrev.toString() + "\n");
 
         for (String file : files) {
             sendUDPMessage("File " + file, previousIP, 10000);
@@ -190,8 +192,9 @@ public class RestNodeService {
 
         String urlPrevious = "http://" + nextIP + ":9000/SetPrevious";
         NodeModel previousNode = new NodeModel(name, thisIp);
-        ResponseEntity<NodeModel> responsePrev =restTemplate.exchange(urlPrevious, HttpMethod.PUT, new HttpEntity<NodeModel>(previousNode), NodeModel.class);
-        System.out.println(responsePrev.toString());
+        ResponseEntity<NodeModel> responsePrev = restTemplate.exchange(urlPrevious, HttpMethod.PUT,
+                new HttpEntity<NodeModel>(previousNode), NodeModel.class);
+        System.out.println("\n" + responsePrev.toString() + "\n");
     }
 
     public void setLowest() throws IOException {
@@ -200,8 +203,9 @@ public class RestNodeService {
 
         String urlNext = "http://" + previousIP + ":9000/SetNext";
         NodeModel nextNode = new NodeModel(name, thisIp);
-        ResponseEntity<NodeModel> responseNext =restTemplate.exchange(urlNext, HttpMethod.PUT, new HttpEntity<NodeModel>(nextNode), NodeModel.class);
-        System.out.println(responseNext.toString());
+        ResponseEntity<NodeModel> responseNext = restTemplate.exchange(urlNext, HttpMethod.PUT,
+                new HttpEntity<NodeModel>(nextNode), NodeModel.class);
+        System.out.println("\n" + responseNext.toString() + "\n");
     }
 
     // Hashfunction, boolean specifies if the string is a node or not
