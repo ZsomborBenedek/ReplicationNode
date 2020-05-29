@@ -8,6 +8,7 @@ import com.example.demo.model.NodeModel;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 public class MulticastListner implements Runnable {
@@ -38,13 +39,16 @@ public class MulticastListner implements Runnable {
                     // sendUDPMessage("previous " + name + "::ip " + thisIp, temp.get(1), 10000);
                     String urlPrevious = "http://" + temp.get(1) + ":9000/SetPrevious";
                     NodeModel previousNode = new NodeModel(nodeService.name, nodeService.thisIp);
-                    restTemplate.exchange(urlPrevious, HttpMethod.PUT, new HttpEntity<NodeModel>(previousNode), NodeModel.class);
+                    ResponseEntity<NodeModel> responsePrev =restTemplate.exchange(urlPrevious, HttpMethod.PUT, new HttpEntity<NodeModel>(previousNode), NodeModel.class);
+                    System.out.println(responsePrev.toString());
+
                     // Mogenlijk Zo reply opvangen?
                     //
                     // sendUDPMessage("next " + name + "::ip " + thisIp, temp.get(1), 10000);
                     String urlNext = "http://" + temp.get(1) + ":9000/SetNext";
                     NodeModel nextNode = new NodeModel(nodeService.name, nodeService.thisIp);
-                    restTemplate.exchange(urlNext, HttpMethod.PUT, new HttpEntity<NodeModel>(nextNode), NodeModel.class);
+                    ResponseEntity<NodeModel> responseNext =restTemplate.exchange(urlNext, HttpMethod.PUT, new HttpEntity<NodeModel>(nextNode), NodeModel.class);
+                    System.out.println(responseNext.toString());
 
                     if (nodeService.isHoogste)
                         if (nodeService.hashfunction(temp.get(0), true) > nodeService.hashfunction(nodeService.name,
@@ -53,7 +57,8 @@ public class MulticastListner implements Runnable {
                             nodeService.isHoogste = false;
 
                             String isHighUrl = "http://" + temp.get(1) + ":9000/IsHighest";
-                            restTemplate.exchange(isHighUrl, HttpMethod.PUT, new HttpEntity<String>("true"), NodeModel.class);
+                            ResponseEntity<NodeModel> responseHigh =restTemplate.exchange(isHighUrl, HttpMethod.PUT, new HttpEntity<String>("true"), NodeModel.class);
+                            System.out.println(responseHigh.toString());
                         }
                     if (nodeService.isLaagste)
                         if (nodeService.hashfunction(temp.get(0), true) < nodeService.hashfunction(nodeService.name,
@@ -62,7 +67,8 @@ public class MulticastListner implements Runnable {
                             nodeService.isLaagste = false;
 
                             String isLowUrl = "http://" + temp.get(1) + ":9000/IsLowest";
-                            restTemplate.exchange(isLowUrl, HttpMethod.PUT, new HttpEntity<String>("true"), NodeModel.class);
+                            ResponseEntity<NodeModel> responseLow =restTemplate.exchange(isLowUrl, HttpMethod.PUT, new HttpEntity<String>("true"), NodeModel.class);
+                            System.out.println(responseLow.toString());
                         }
                     nodeService.next = temp.get(0);
                     nodeService.nextIP = temp.get(1);
@@ -82,14 +88,17 @@ public class MulticastListner implements Runnable {
 
                             String urlPrevious = "http://" + temp.get(1) + ":9000/SetPrevious";
                             NodeModel previousNode = new NodeModel(nodeService.name, nodeService.thisIp);
-                            restTemplate.exchange(urlPrevious, HttpMethod.PUT, new HttpEntity<NodeModel>(previousNode), NodeModel.class);
+                            ResponseEntity<NodeModel> responsePrev =restTemplate.exchange(urlPrevious, HttpMethod.PUT, new HttpEntity<NodeModel>(previousNode), NodeModel.class);
+                            System.out.println(responsePrev.toString());
 
                             String urlNext = "http://" + temp.get(1) + ":9000/SetNext";
                             NodeModel nextNode = new NodeModel(nodeService.next, nodeService.nextIP);
-                            restTemplate.exchange(urlNext, HttpMethod.PUT, new HttpEntity<NodeModel>(nextNode), NodeModel.class);
+                            ResponseEntity<NodeModel> responseNext =restTemplate.exchange(urlNext, HttpMethod.PUT, new HttpEntity<NodeModel>(nextNode), NodeModel.class);
+                            System.out.println(responseNext.toString());
 
                             String isHighUrl = "http://" + temp.get(1) + ":9000/IsHighest";
-                            restTemplate.exchange(isHighUrl, HttpMethod.PUT, new HttpEntity<String>("true"), NodeModel.class);
+                            ResponseEntity<NodeModel> responseHigh =restTemplate.exchange(isHighUrl, HttpMethod.PUT, new HttpEntity<String>("true"), NodeModel.class);
+                            System.out.println(responseHigh.toString());
 
                             nodeService.next = temp.get(0);
                             nodeService.nextIP = temp.get(1);
@@ -105,15 +114,18 @@ public class MulticastListner implements Runnable {
 
                             String urlNext = "http://" + temp.get(1) + ":9000/SetNext";
                             NodeModel nextNode = new NodeModel(nodeService.next, nodeService.thisIp);
-                            restTemplate.exchange(urlNext, HttpMethod.PUT, new HttpEntity<NodeModel>(nextNode), NodeModel.class);
+                            ResponseEntity<NodeModel> responseNext =restTemplate.exchange(urlNext, HttpMethod.PUT, new HttpEntity<NodeModel>(nextNode), NodeModel.class);
+                            System.out.println(responseNext.toString());
 
                             String urlPrevious = "http://" + temp.get(1) + ":9000/SetPrevious";
                             NodeModel previousNode = new NodeModel(nodeService.previous, nodeService.previousIP);
-                            restTemplate.exchange(urlPrevious, HttpMethod.PUT, new HttpEntity<NodeModel>(previousNode), NodeModel.class);
+                            ResponseEntity<NodeModel> responsePrev =restTemplate.exchange(urlPrevious, HttpMethod.PUT, new HttpEntity<NodeModel>(previousNode), NodeModel.class);
+                            System.out.println(responsePrev.toString());
 
                             String isLowUrl = "http://" + temp.get(1) + ":9000/IsLowest";
-                            restTemplate.exchange(isLowUrl, HttpMethod.PUT, new HttpEntity<String>("true"), NodeModel.class);
-                            ;
+                            ResponseEntity<NodeModel> responseLow =restTemplate.exchange(isLowUrl, HttpMethod.PUT, new HttpEntity<String>("true"), NodeModel.class);
+                            System.out.println(responseLow.toString());
+
 
                             nodeService.previous = temp.get(0);
                             nodeService.previousIP = temp.get(1);
@@ -128,7 +140,8 @@ public class MulticastListner implements Runnable {
 
                         String urlPrevious = "http://" + temp.get(1) + ":9000/SetPrevious";
                         NodeModel previousNode = new NodeModel(nodeService.name, nodeService.thisIp);
-                        restTemplate.exchange(urlPrevious, HttpMethod.PUT, new HttpEntity<NodeModel>(previousNode), NodeModel.class);
+                        ResponseEntity<NodeModel> responsePrev =restTemplate.exchange(urlPrevious, HttpMethod.PUT, new HttpEntity<NodeModel>(previousNode), NodeModel.class);
+                        System.out.println(responsePrev.toString());
 
                         //
                         nodeService.next = temp.get(0);
@@ -144,7 +157,8 @@ public class MulticastListner implements Runnable {
 
                         String urlNext = "http://" + temp.get(1) + ":9000/SetNext";
                         NodeModel nextNode = new NodeModel(nodeService.name, nodeService.thisIp);
-                        restTemplate.exchange(urlNext, HttpMethod.PUT, new HttpEntity<NodeModel>(nextNode), NodeModel.class);
+                        ResponseEntity<NodeModel> responseNext =restTemplate.exchange(urlNext, HttpMethod.PUT, new HttpEntity<NodeModel>(nextNode), NodeModel.class);
+                        System.out.println(responseNext.toString());
 
                         // haha
                         nodeService.previous = temp.get(0);

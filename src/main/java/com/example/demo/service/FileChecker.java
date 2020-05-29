@@ -7,6 +7,7 @@ import com.example.demo.model.FileModel;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 public class FileChecker implements Runnable {
@@ -64,7 +65,8 @@ public class FileChecker implements Runnable {
                 for (String s : temp) {
                     String url = "http://" + nodeService.nameServerIP + ":10000/RemoveFile";
                     FileModel file = new FileModel(nodeService.name, s);
-                    restTemplate.exchange(url, HttpMethod.DELETE, new HttpEntity<FileModel>(file), FileModel.class);
+                    ResponseEntity<FileModel> response = restTemplate.exchange(url, HttpMethod.DELETE, new HttpEntity<FileModel>(file), FileModel.class);
+                    System.out.println(response.toString());
                 }
                 nodeService.chekFiles();
             }
