@@ -1,16 +1,21 @@
 package com.example.demo.service;
 
 import javax.annotation.PostConstruct;
+import com.example.demo.model.FileModel;
+import com.example.demo.model.NodeModel;
+
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.web.client.RestTemplate;
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class RestNodeService {
 
     InetAddress inetAddress = InetAddress.getLocalHost();
     public String name = inetAddress.getHostName();
-    public String thisIp =inetAddress.getHostAddress();
+    public String thisIp = inetAddress.getHostAddress();
     String previous;
     String next;
     String previousIP = "";
@@ -22,143 +27,142 @@ public class RestNodeService {
     boolean running = true;
     boolean isHoogste = false;
     boolean isLaagste = false;
+    RestTemplate restTemplate = new RestTemplate();
 
     public RestNodeService() throws IOException {
-        sendUDPMessage("newNode "+name+"::"+thisIp, "230.0.0.0",10000);
-        System.out.println("My name is "+name);
-        System.out.println("My ip is"+thisIp);
+        sendUDPMessage("newNode " + name + "::" + thisIp, "230.0.0.0", 10000);
+        System.out.println("My name is " + name);
+        System.out.println("My ip is" + thisIp);
     }
+
     @PostConstruct
 
-
-    //Send UDP Messages
-    public static void sendUDPMessage(String message,
-                                      String ipAddress, int port) throws IOException {
+    // Send UDP Messages
+    public static void sendUDPMessage(String message, String ipAddress, int port) throws IOException {
         DatagramSocket socket = new DatagramSocket();
         InetAddress group = InetAddress.getByName(ipAddress);
         byte[] msg = message.getBytes();
-        DatagramPacket packet = new DatagramPacket(msg, msg.length,
-                group, port);
+        DatagramPacket packet = new DatagramPacket(msg, msg.length, group, port);
         socket.send(packet);
         socket.close();
     }
 
-    //Parse message to set up new next node
-    public void next(String name, String ip){
+    // Parse message to set up new next node
+    public void next(String name, String ip) {
         if (!name.isEmpty() && !ip.isEmpty()) {
             next = name;
             nextIP = ip;
-            System.out.println("my new next is "+next+" "+nextIP);
+            System.out.println("my new next is " + next + " " + nextIP);
         }
     }
 
-
-    //Parse message to set up new previous node
-    public void previous(String name, String ip){
+    // Parse message to set up new previous node
+    public void previous(String name, String ip) {
         if (!name.isEmpty() && !ip.isEmpty()) {
             previous = name;
             previousIP = ip;
-            System.out.println("my new previous is "+previous+" "+previousIP);
+            System.out.println("my new previous is " + previous + " " + previousIP);
         }
     }
 
-
-    //Check locally stored files
+    // Check locally stored files
     public void chekFiles() throws IOException {
         files.clear();
         File folder = null;
         if (name.equals("host2"))
-            folder = new File("/home/pi/ReplicationNode/src/localFilesHost1");
+            folder = new File("src/localFilesHost1");
         if (name.equals("host3"))
-            folder = new File("/home/pi/ReplicationNode/src/LocalFilesHost2");
+            folder = new File("src/LocalFilesHost2");
         if (name.equals("host4"))
-            folder = new File("/home/pi/ReplicationNode/src/LocalFilesHost3");
+            folder = new File("src/LocalFilesHost3");
         if (name.equals("host5"))
-            folder = new File("/home/pi/ReplicationNode/src/LocalFilesHost4");
+            folder = new File("src/LocalFilesHost4");
         File[] listOfFiles = folder.listFiles();
 
         for (int i = 0; i < listOfFiles.length; i++) {
             if (listOfFiles[i].isFile()) {
-                String bestand = listOfFiles[i].getName().replace("Files\\","");
+                String bestand = listOfFiles[i].getName().replace("Files\\", "");
                 String[] temp = bestand.split("\\.");
                 files.add(temp[0]);
-                System.out.println(bestand+"is locally stored");
-                URL connection2 = new URL("http://"+nameServerIP+":10000/AddFile?Name="+name+"&File="+bestand);
-                connection2.openConnection().getInputStream();
+                System.out.println(bestand + "is locally stored");
+
+                String url = "http://" + nameServerIP + ":10000/AddFile";
+                FileModel file = new FileModel(name, bestand);
+                restTemplate.postForEntity(url, file, FileModel.class);
             } else if (listOfFiles[i].isDirectory()) {
                 System.out.println("Directory " + listOfFiles[i].getName());
             }
         }
     }
-    private void chekReplicatedFiles(){
-        File folder = new File("/home/pi/ReplicationNode/src/replicatedFiles");
+
+    private void chekReplicatedFiles() {
+        File folder = new File("src/replicatedFiles");
         File[] listOfFiles = folder.listFiles();
 
         for (int i = 0; i < listOfFiles.length; i++) {
             if (listOfFiles[i].isFile()) {
-                String bestand = listOfFiles[i].getName().replace("Files\\","");
+                String bestand = listOfFiles[i].getName().replace("Files\\", "");
                 String[] temp = bestand.split(".");
                 files.add(temp[0]);
-                System.out.println("Ik heb file "+temp[0]+" lokaal staan bruur.");
+                System.out.println("Ik heb file " + temp[0] + " lokaal staan bruur.");
 
             } else if (listOfFiles[i].isDirectory()) {
                 System.out.println("Directory " + listOfFiles[i].getName());
             }
         }
     }
-    public void addReplicatedFile(File newFile, String name){
-        // FILE FILE met filepath, chek als file al bestaat-> delete, binnegekrege file aanmaken.
+
+    public void addReplicatedFile(File newFile, String name) {
+        // FILE FILE met filepath, chek als file al bestaat-> delete, binnegekrege file
+        // aanmaken.
 
     }
 
-
-    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    //Hier mogenlijk bool om folder te bepalen
-    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    // Hier mogenlijk bool om folder te bepalen
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     public void recieveTCP(String ip, String filename) throws IOException, InterruptedException {
-        System.out.println("ik run nu receive tcp met variabelen ip "+ip+" filename "+filename);
-        byte [] b = new byte[5000];
-        Socket sr = new Socket(ip,6969);
+        System.out.println("ik run nu receive tcp met variabelen ip " + ip + " filename " + filename);
+        byte[] b = new byte[5000];
+        Socket sr = new Socket(ip, 6969);
         InputStream is = sr.getInputStream();
-        FileOutputStream fr = new FileOutputStream("/home/pi/ReplicationNode/src/replicatedFiles/"+filename);
-        is.read(b,0,b.length);
-        fr.write(b,0,b.length);
-        System.out.println("File "+filename+" Recieved");
+        FileOutputStream fr = new FileOutputStream(new File("src/replicatedFiles/").getAbsolutePath() + filename);
+        is.read(b, 0, b.length);
+        fr.write(b, 0, b.length);
+        System.out.println("File " + filename + " Recieved");
         sr.close();
     }
 
-    //ShutDown
+    // ShutDown
     public void addToNameServer(String ip) throws IOException {
         nameServerIP = ip;
-        URL connection2 = new URL("http://"+ip+":10000/AddNode?Name="+name+"&Ip="+thisIp);
-        connection2.openConnection().getInputStream();
+        String url = "http://" + ip + ":10000/AddNode";
+        NodeModel node = new NodeModel(name, thisIp);
+        restTemplate.postForEntity(url, node, NodeModel.class);
         chekFiles();
     }
+
     public void shutdown() throws IOException {
 
         //
-        URL connection2 = new URL("http://"+previousIP+":10000/SetNext?Name="+next+"&ip="+nextIP);
-        BufferedReader in = new BufferedReader(new InputStreamReader(
-                connection2.openStream()));
-        String message = in.readLine();
-        //
+        String urlNext = "http://" + previousIP + ":10000/SetNext";
+        NodeModel nextNode = new NodeModel(next, nextIP);
+        restTemplate.exchange(urlNext, HttpMethod.PUT, new HttpEntity<NodeModel>(nextNode), NodeModel.class);
 
-        URL connection = new URL("http://"+nextIP+":10000/SetPrevious?Name="+previous+"&ip="+previousIP);
-        //
-        connection.openConnection().getInputStream();
-        //
+        String urlPrevious = "http://" + nextIP + ":10000/SetPrevious";
+        NodeModel previousNode = new NodeModel(previous, previousIP);
+        restTemplate.exchange(urlPrevious, HttpMethod.PUT, new HttpEntity<NodeModel>(previousNode), NodeModel.class);
 
-        for (String file : files){
-            sendUDPMessage("File "+file,previousIP,10000);
+        for (String file : files) {
+            sendUDPMessage("File " + file, previousIP, 10000);
         }
         running = false;
         System.out.println("thread shut down");
     }
 
-
-    void setUp(String msg){
-        String haha = msg.replace("nodeCount ","");
-        if(Integer.parseInt(haha)<=1){
+    void setUp(String msg) {
+        String haha = msg.replace("nodeCount ", "");
+        if (Integer.parseInt(haha) <= 1) {
             System.out.println("I am  First");
             System.out.println("I am the highest hashed node");
             System.out.println("I am the lowest hashed node");
@@ -170,40 +174,44 @@ public class RestNodeService {
         }
         setupb = true;
     }
+
     public void setHighest() throws IOException {
         System.out.println("I am the highest hashed node");
         isHoogste = true;
-        URL connection = new URL("http://" + nextIP + ":9000/SetPrevious?name=" + name + "&ip=" + thisIp);
-        connection.openConnection().getInputStream();
+
+        String urlPrevious = "http://" + nextIP + ":9000/SetPrevious";
+        NodeModel previousNode = new NodeModel(name, thisIp);
+        restTemplate.exchange(urlPrevious, HttpMethod.PUT, new HttpEntity<NodeModel>(previousNode), NodeModel.class);
     }
+
     public void setLowest() throws IOException {
         System.out.println("I am the lowest hashed node");
         isLaagste = true;
-        URL connection = new URL("http://" + previousIP + ":9000/SetNext?name=" + name + "&ip=" + thisIp);
-        connection.openConnection().getInputStream();
+
+        String urlNext = "http://" + previousIP + ":9000/SetNext";
+        NodeModel nextNode = new NodeModel(name, thisIp);
+        restTemplate.exchange(urlNext, HttpMethod.PUT, new HttpEntity<NodeModel>(nextNode), NodeModel.class);
     }
 
-
-    //Hashfunction, boolean specifies if the string is a node or not
+    // Hashfunction, boolean specifies if the string is a node or not
     public int hashfunction(String name, boolean node) {
-        int hash=0;
+        int hash = 0;
         int temp = 0;
         int i;
-        for (i = 0; i<name.length();i++) {
+        for (i = 0; i < name.length(); i++) {
             hash = 3 * hash + name.charAt(i);
-            temp = temp+ name.charAt(i);
+            temp = temp + name.charAt(i);
         }
-        hash = hash+temp;
+        hash = hash + temp;
         if (node) {
-        }
-        else
-            hash = hash/53;
+        } else
+            hash = hash / 53;
         return hash;
     }
 
     public void removeReplicatedFile(String file) {
-        File temp = new File("/home/pi/ReplicationNode/src/replicatedFiles/"+file);
+        File temp = new File("src/replicatedFiles/" + file);
         temp.delete();
-        System.out.println("Replicated File file "+file+" is verwijderd");
+        System.out.println("Replicated File file " + file + " is verwijderd");
     }
 }
