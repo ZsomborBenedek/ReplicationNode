@@ -1,12 +1,20 @@
 package com.example.demo.controller;
+
+import com.example.demo.model.FileModel;
+import com.example.demo.model.NodeModel;
 import com.example.demo.service.FileChecker;
 import com.example.demo.service.MulticastListner;
 import com.example.demo.service.RestNodeService;
 import com.example.demo.service.TCPListner;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
 import javax.annotation.PostConstruct;
 import java.io.*;
 import java.util.concurrent.ExecutorService;
@@ -14,8 +22,10 @@ import java.util.concurrent.Executors;
 
 @RestController
 public class NodeController {
+
     RestNodeService nodeService;
     ExecutorService threadPool = Executors.newFixedThreadPool(5);
+
     public NodeController() throws IOException {
     }
 
@@ -26,102 +36,118 @@ public class NodeController {
         threadPool.execute(new FileChecker(nodeService));
     }
 
+    @PostMapping("/SetNameServer")
+    public ResponseEntity<String> setNameServer(@RequestBody String ip) {
+        if (!ip.isEmpty()) {
+            System.out.println("running /SetNameServer, ip " + ip);
+            try {
+                nodeService.addToNameServer(ip);
+            } catch (IOException e) {
+                return new ResponseEntity<String>(ip, HttpStatus.UNSUPPORTED_MEDIA_TYPE);
+            }
+            return new ResponseEntity<String>(ip, HttpStatus.CREATED);
+        }
+        return new ResponseEntity<String>(ip, HttpStatus.BAD_REQUEST);
+    }
 
-    @GetMapping("/SetNameServer")
-    public String setNameServer (@RequestParam(value = "ip", defaultValue = "omo") String ip) throws IOException {
-        if (!ip.equals("omo")) {
-            System.out.println("running /SetNameServer, ip "+ip);
-            nodeService.addToNameServer(ip);
-            return "node  with ip address "+ip+" was succesfully added to the node map";
+    @PutMapping("/SetNext")
+    public ResponseEntity<NodeModel> setNext(@RequestBody NodeModel node) {
+        if (!node.getName().isEmpty() && !node.getIp().isEmpty()) {
+            System.out.println("Running /SetNext, name " + node.getName() + " ip " + node.getIp());
+            nodeService.next(node.getName(), node.getIp());
+            return new ResponseEntity<NodeModel>(node, HttpStatus.OK);
         }
-        else
-            return"adding new node failed";
+        return new ResponseEntity<NodeModel>(node, HttpStatus.BAD_REQUEST);
+
     }
-    @GetMapping("/SetNext")
-    public String setNext (@RequestParam(value = "name", defaultValue = "omo") String name,@RequestParam(value = "ip", defaultValue = "omo") String ip) throws IOException {
-        if (!name.equals("omo") && !ip.equals("omo")) {
-            System.out.println("Running /SetNext, name "+name+" ip "+ip);
-            nodeService.next(name, ip);
-            return "node "+name+" with ip address "+ip+" was succesfully added to the node map";
+
+    @PutMapping("/SetPrevious")
+    public ResponseEntity<NodeModel> setPrevious(@RequestBody NodeModel node) {
+        if (!node.getName().isEmpty() && !node.getIp().isEmpty()) {
+            System.out.println("Running /SetPrevious, name " + node.getName() + " ip " + node.getIp());
+            nodeService.previous(node.getName(), node.getIp());
+            return new ResponseEntity<NodeModel>(node, HttpStatus.OK);
         }
-        else
-            return"adding new node failed";
+        return new ResponseEntity<NodeModel>(node, HttpStatus.BAD_REQUEST);
     }
-    @GetMapping("/SetPrevious")
-    public String setPrevious (@RequestParam(value = "name", defaultValue = "omo") String name,@RequestParam(value = "ip", defaultValue = "omo") String ip) throws IOException {
-        if (!name.equals("omo") && !ip.equals("omo")) {
-            System.out.println("Running /SetPrevious, name "+name+" ip "+ip);
-            nodeService.previous(name, ip);
-            return "node "+name+" with ip address "+ip+" was succesfully added to the node map";
+
+    @GetMapping("/GetReplicationFile/{fileName}/{ip}")
+    public ResponseEntity<FileModel> getReplicationFile(@PathVariable String fileName, @PathVariable String ip) {
+        if (!fileName.isEmpty() && !ip.isEmpty()) {
+            System.out.println("Running /GetReplicatedFile, name " + fileName + " ownerIP " + ip);
+            try {
+                nodeService.recieveTCP(ip, fileName);
+            } catch (IOException | InterruptedException e) {
+                return new ResponseEntity<FileModel>(new FileModel(ip, fileName), HttpStatus.NOT_FOUND);
+            }
+            return new ResponseEntity<FileModel>(new FileModel(ip, fileName), HttpStatus.OK);
         }
-        else
-            return"adding new node failed";
+        return new ResponseEntity<FileModel>(new FileModel(ip, fileName), HttpStatus.BAD_REQUEST);
     }
-    @GetMapping("/GetReplicationFile")
-    public String getReplicationFile (@RequestParam(value = "name", defaultValue = "omo") String name,@RequestParam(value = "ownerIP", defaultValue = "omo") String ip) throws IOException, InterruptedException {
-        if (!name.equals("omo") && !ip.equals("omo")) {
-            System.out.println("Running /GetReplicatedFile, name "+name+" ownerIP "+ip);
-            nodeService.recieveTCP(ip,name);
-            return "node "+name+" with ip address "+ip+" was succesfully added to the node map";
+
+    @PostMapping("/TransferReplicatedFile")
+    public ResponseEntity<NodeModel> transferReplicatedFile(@RequestBody FileModel file) {
+        if (!file.getFile().isEmpty()) {
+            System.out.println("Running /TransferReplicatedFile, name " + file.getFile() + " ownerIP ");
+            threadPool.execute(new TCPListner(nodeService, false, file.getFile()));
+            return new ResponseEntity<NodeModel>(new NodeModel(file.getFile()), HttpStatus.CREATED);
         }
-        else
-            return"adding new node failed";
+        return new ResponseEntity<NodeModel>(new NodeModel(file.getFile()), HttpStatus.BAD_REQUEST);
     }
-    @GetMapping("/TransferReplicatedFile")
-    public String transferReplicatedFile (@RequestParam(value = "name", defaultValue = "omo") String name) throws IOException {
-        if (!name.equals("omo")) {
-            System.out.println("Running /TransferReplicatedFile, name "+name+" ownerIP ");
-            threadPool.execute(new TCPListner(nodeService,false,name));
-            return "node "+name+" with ip address "+" was succesfully added to the node map";
+
+    @PostMapping("/HostLocalFile")
+    public ResponseEntity<NodeModel> hostLocalFile(@RequestBody FileModel file) {
+        if (!file.getFile().isEmpty()) {
+            System.out.println("Running /HostLocalFile, name " + file.getFile());
+            // Ga thread moete worrexx
+            threadPool.execute(new TCPListner(nodeService, true, file.getFile()));
+            return new ResponseEntity<NodeModel>(new NodeModel(file.getFile()), HttpStatus.CREATED);
         }
-        else
-            return"adding new node failed";
+        return new ResponseEntity<NodeModel>(new NodeModel(file.getFile()), HttpStatus.BAD_REQUEST);
+
     }
-    @GetMapping("/HostLocalFile")
-    public String hostLocalFile (@RequestParam(value = "FileName", defaultValue = "omo") String name) throws IOException {
-        if (!name.equals("omo")) {
-            System.out.println("Running /HostLocalFile, name "+name);
-            //Ga thread moete worrexx
-            threadPool.execute( new TCPListner(nodeService,true,name));
-            return "node "+name+" with ip address was succesfully added to the node map";
+
+    @DeleteMapping("/RemoveReplicatedFile")
+    public ResponseEntity<NodeModel> RemoveReplicatedFile(@RequestBody FileModel file) {
+        if (!file.getFile().isEmpty()) {
+            nodeService.removeReplicatedFile(file.getFile());
+            return new ResponseEntity<NodeModel>(new NodeModel(file.getFile()), HttpStatus.CREATED);
         }
-        else
-            return"adding new node failed";
+        return new ResponseEntity<NodeModel>(new NodeModel(file.getFile()), HttpStatus.BAD_REQUEST);
     }
-    @GetMapping("/RemoveReplicatedFile")
-    public String RemoveReplicatedFile (@RequestParam(value = "File", defaultValue = "omo") String file) throws IOException {
-        if (!file.equals("omo")) {
-            nodeService.removeReplicatedFile(file);
-            return "node "+file+" with ip address "+" was succesfully added to the node map";
-        }
-        else
-            return"adding new node failed";
-    }
-    @GetMapping("/IsHighest")
-    public String isHighest (@RequestParam(value = "Highest", defaultValue = "omo") String value) throws IOException {
-        if (!value.equals("omo")) {
-            if(value.equals("true"))
-            nodeService.setHighest();
-            return "node "+value+" with ip address was succesfully added to the node map";
-        }
-        else
-            return"adding new node failed";
-    }
-    @GetMapping("/IsLowest")
-    public String isLowest (@RequestParam(value = "Lowest", defaultValue = "omo") String value) throws IOException {
-        if (!value.equals("omo")) {
+
+    @PutMapping("/IsHighest")
+    public ResponseEntity<NodeModel> isHighest(@RequestBody String value) {
+        if (!value.isEmpty()) {
             if (value.equals("true"))
-            nodeService.setLowest();
-            return "node "+value+" with ip address was succesfully added to the node map";
+                try {
+                    nodeService.setHighest();
+                } catch (IOException e) {
+                    return new ResponseEntity<NodeModel>(new NodeModel(value), HttpStatus.UNSUPPORTED_MEDIA_TYPE);
+                }
+            return new ResponseEntity<NodeModel>(new NodeModel(value), HttpStatus.CREATED);
         }
-        else
-            return"adding new node failed";
-    }
-    @GetMapping("/Kill")
-    public String kill () throws IOException {
-        System.out.println("Ik run nu /kill");
-        nodeService.shutdown();
-        return "node "+nodeService.name+" with ip address "+nodeService.thisIp+" was succesfully added to the node map";
+        return new ResponseEntity<NodeModel>(new NodeModel(value), HttpStatus.BAD_REQUEST);
     }
 
+    @PutMapping("/IsLowest")
+    public ResponseEntity<NodeModel> isLowest(@RequestBody String value) {
+        if (!value.isEmpty()) {
+            if (value.equals("true"))
+                try {
+                    nodeService.setLowest();
+                } catch (IOException e) {
+                    return new ResponseEntity<NodeModel>(new NodeModel(value), HttpStatus.UNSUPPORTED_MEDIA_TYPE);
+                }
+            return new ResponseEntity<NodeModel>(new NodeModel(value), HttpStatus.CREATED);
+        }
+        return new ResponseEntity<NodeModel>(new NodeModel(value), HttpStatus.BAD_REQUEST);
+    }
+
+    @GetMapping("/Kill")
+    public ResponseEntity<NodeModel> kill() throws IOException {
+        System.out.println("Running /Kill");
+        nodeService.shutdown();
+        return new ResponseEntity<NodeModel>(new NodeModel(nodeService.name, nodeService.thisIp), HttpStatus.OK);
+    }
 }
